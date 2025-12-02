@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('profile_image')->nullable();
             $table->string('address')->nullable();
             $table->enum('role', ['admin', 'user'])->default('user');
+            $table->text('fcm_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
