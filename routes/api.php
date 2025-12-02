@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 Route::prefix('v1/')->group(function () {
   Route::prefix('auth/')->group(function () {
 
-      Route::post('login', [AuthController::class, 'login']);
+    Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('verify-email', [AuthController::class, 'verifyEmail']);
     Route::post('verify-affiliate', [AuthController::class, 'verifyAffiliate']);
@@ -20,6 +20,8 @@ Route::prefix('v1/')->group(function () {
     Route::middleware(CheckJwtToken::class)->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('me', [AuthController::class, 'me']);
+    Route::post('update-profile', [AuthController::class, 'updateProfile']);
+
     });
       });
 });

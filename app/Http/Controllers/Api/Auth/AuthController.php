@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\Api\Auth\loginRequest;
 use App\Http\Requests\Api\Auth\RegisterRequest;
+use App\Http\Requests\Api\Auth\UPdateProfileRequest;
 use App\Http\Requests\Api\Auth\VerifyEmailRequest;
 use App\Http\Requests\Api\Auth\VerifyAffiliateRequest;
 use App\Models\userBalance;
@@ -122,4 +123,21 @@ class AuthController extends Controller
 
     return $this->successResponse([], 'Affiliate code is valid, balance updated', 200);
 }
+
+public function updateProfile(UPdateProfileRequest $request)
+{
+    $user = auth()->user();
+
+        $validatedData = $request->validated();
+
+    if (isset($validatedData['password'])) {
+        $validatedData['password'] = bcrypt($validatedData['password']);
+    }
+
+    $user->update($validatedData);
+        return $this->successResponse([
+            'user' => $user,
+        ], 'Profile updated successfully', 200);
+
+    }
 }
