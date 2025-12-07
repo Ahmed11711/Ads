@@ -16,8 +16,8 @@ class WithdrawController extends Controller
 
     public function index()
     {
-        $user = auth()->user();
-        $withdrawals = withdraw::where('user_id', $user->id)->get();
+        // $user = auth()->user();
+        $withdrawals = withdraw::where()->get();
 
         return $this->successResponse($withdrawals, 'User withdrawals retrieved successfully.');
     }
