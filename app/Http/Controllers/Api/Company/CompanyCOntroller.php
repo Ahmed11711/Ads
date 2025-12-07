@@ -14,6 +14,7 @@ class CompanyCOntroller extends Controller
     public function index()
     {
         $company=Company::get();
+        $company->Reward=0.5;
         return $this->successResponse($company,'All Companies',200);
 
     }
