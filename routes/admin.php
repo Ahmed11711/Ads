@@ -13,6 +13,7 @@ Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(functi
     Route::apiResource('users', UserController::class)->names('user');
     Route::apiResource('withdraws', withdrawController::class)->names('withdraw');
     Route::apiResource('notifications', notificationsController::class)->names('notifications');
+    Route::get('my-affiliate', [AuthController::class, 'myAffiliate']);
 });
 
 

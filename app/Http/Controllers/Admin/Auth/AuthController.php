@@ -16,6 +16,7 @@ use App\Http\Requests\Api\Auth\RegisterRequest;
 use App\Http\Requests\Api\Auth\resendOtpRequest;
 use App\Http\Requests\Api\Auth\VerifyEmailRequest;
 use App\Http\Requests\Api\Auth\UPdateProfileRequest;
+use App\Http\Requests\Admin\Affiliate\AllChildRequest;
 use App\Http\Requests\Api\Auth\VerifyAffiliateRequest;
 
 class AuthController extends Controller
@@ -44,6 +45,21 @@ class AuthController extends Controller
         } catch (JWTException $e) {
             return $this->errorResponse('Could not create token', 500);
         }
+    }
+
+    public function myAffiliate(AllChildRequest $request)
+    {
+        $data = $request->validated();
+
+        $parentUser = User::where('referred_by', $data['affiliate_code'])->get();
+
+        if (!$parentUser) {
+            return $this->errorResponse('Affiliate code not found', 404);
+        }
+
+
+        return $this->successResponse($parentUser, 'Child affiliates retrieved successfully.');
+
     }
 
 }
