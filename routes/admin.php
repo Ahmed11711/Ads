@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\notifications\notificationsController;
+use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\withdraw\withdrawController;
 use App\Http\Middleware\CheckJwtTokenByAdmin;
-use App\Http\Controllers\Admin\Auth\AuthController;
-use App\Http\Controllers\Admin\User\UserController;
-
+use Illuminate\Support\Facades\Route;
 
 Route::post('admin/v1/login', [AuthController::class, 'login'])->name('admin.login');
 Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(function () {
@@ -15,7 +14,4 @@ Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(functi
     Route::apiResource('notifications', notificationsController::class)->names('notifications');
 });
 
-
-Route::prefix('v1')->group(function () {
-    
-});
+Route::prefix('v1')->group(function () {});

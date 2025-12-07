@@ -2,10 +2,8 @@
 
 namespace App\Repositories\BaseRepository;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use App\Repositories\BaseRepository\BaseRepositoryInterface;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -16,10 +14,10 @@ class BaseRepository implements BaseRepositoryInterface
         $this->model = $model;
     }
 
-   public function query()
-{
-    return $this->model->newQuery();
-}
+    public function query()
+    {
+        return $this->model->newQuery();
+    }
 
     public function all()
     {
@@ -40,6 +38,7 @@ class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model->find($id);
     }
+
     public function findBYKey($key, $value)
     {
         return $this->model->where($key, $value)->first();
@@ -47,10 +46,8 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function getByUserId($userId)
     {
-     return $this->model->where('user_id', $userId)->get();
-
+        return $this->model->where('user_id', $userId)->get();
     }
-
 
     public function create(array $data)
     {
@@ -61,21 +58,26 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $record = $this->find($id);
         $record->update($data);
+
         return $record;
     }
 
     public function delete($id)
     {
         $record = $this->find($id);
+
         return $record->delete();
     }
+
     public function deleteMultiple(array $ids)
     {
         if (empty($ids)) {
             return 0;
         }
+
         return $this->model->whereIn('id', $ids)->delete();
     }
+
     public function deleteWithAttachments(array $ids): int
     {
         $records = $this->model->whereIn('id', $ids)->get();

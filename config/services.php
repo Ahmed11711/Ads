@@ -35,4 +35,19 @@ return [
         ],
     ],
 
+    'ayetstudios' => [
+        'api_key' => env('AYETSTUDIOS_API_KEY'),
+        'url' => 'https://www.ayetstudios.com',
+    ],
+
+    'adgem' => [
+        'api_key' => env('ADGEM_API_KEY'),
+        'url' => 'https://offer-api.adgem.com',
+    ],
+
+    'cpx' => [
+        'app_id' => env('CPX_API_ID'),
+        'url' => 'https://live-api.cpx-research.com/api',
+        'hash' => env('CPX_API_HASH'),
+    ],
 ];

@@ -3,11 +3,12 @@
 namespace App\Traits;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
- trait ApiResponseTrait
+
+trait ApiResponseTrait
 {
     public function successResponse(
         mixed $data = null,
@@ -19,10 +20,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
         return response()->json(
             array_filter([
                 'success' => true,
-                'status'  => $status,
+                'status' => $status,
                 'message' => $message,
-                'data'    => $data,
-            ], fn($v) => $v !== null),
+                'data' => $data,
+            ], fn ($v) => $v !== null),
             $status
         );
     }
@@ -37,10 +38,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
         return response()->json(
             array_filter([
                 'success' => false,
-                'status'  => $status,
+                'status' => $status,
                 'message' => $message,
-                'data'    => $data,
-            ], fn($v) => $v !== null),
+                'data' => $data,
+            ], fn ($v) => $v !== null),
             $status
         );
     }
@@ -93,11 +94,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
         );
     }
 
-   
-
-public function successResponsePaginate($data, string $message = '', int $code = 200): JsonResponse
-{
-        $ss= response()->json([
+    public function successResponsePaginate($data, string $message = '', int $code = 200): JsonResponse
+    {
+        $ss = response()->json([
             'status' => true,
             'message' => $message,
             'data' => $data->items(),
@@ -108,37 +107,26 @@ public function successResponsePaginate($data, string $message = '', int $code =
                 'total' => $data->total(),
             ],
         ], $code);
-        
-         Log::alert("sss",[$ss]);
 
-         return $ss;
+        Log::alert('sss', [$ss]);
 
+        return $ss;
 
-     if (method_exists($data, 'resource') && $data->resource instanceof LengthAwarePaginator) {
-        $paginator = $data->resource;
+        if (method_exists($data, 'resource') && $data->resource instanceof LengthAwarePaginator) {
+            $paginator = $data->resource;
 
-        return response()->json([
-            'status' => true,
-            'message' => $message,
-            'data' => $data->collection, // الموارد بعد التحويل
-            'meta' => [
-                'current_page' => $paginator->currentPage(),
-                'last_page' => $paginator->lastPage(),
-                'per_page' => $paginator->perPage(),
-                'total' => $paginator->total(),
-            ],
-        ], $code);
+            return response()->json([
+                'status' => true,
+                'message' => $message,
+                'data' => $data->collection, // الموارد بعد التحويل
+                'meta' => [
+                    'current_page' => $paginator->currentPage(),
+                    'last_page' => $paginator->lastPage(),
+                    'per_page' => $paginator->perPage(),
+                    'total' => $paginator->total(),
+                ],
+            ], $code);
+        }
+
     }
-
-  
 }
-
-}
-
-
-
-
-
-
-
-

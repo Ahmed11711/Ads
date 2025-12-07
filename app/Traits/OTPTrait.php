@@ -6,9 +6,6 @@ trait OTPTrait
 {
     /**
      * Generate a random numeric OTP.
-     *
-     * @param int $length
-     * @return string
      */
     public function generateOtp(int $length = 6): string
     {

@@ -2,20 +2,20 @@
 
 namespace App\Services\command;
 
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
-class ModelSeederService
+class ModuleSeederService
 {
     public static function make(string $model)
     {
         // 🧱 تحديد اسم الجدول بناءً على اسم الموديل
         $table = Str::snake(Str::pluralStudly($model));
 
-        if (!Schema::hasTable($table)) {
+        if (! Schema::hasTable($table)) {
             return "❌ Table '{$table}' does not exist in database!";
         }
 
@@ -42,7 +42,7 @@ class ModelSeederService
         $seederClass = "Database\\Seeders\\{$model}Seeder";
         Artisan::call('db:seed', [
             '--class' => $seederClass,
-            '--force' => true
+            '--force' => true,
         ]);
 
         return "✅ {$model}Seeder created and executed successfully.";
@@ -56,12 +56,15 @@ class ModelSeederService
             $dataString = "            [\n";
 
             foreach ($columns as $col) {
-                if (in_array($col, ['id', 'created_at', 'updated_at'])) continue;
+                if (in_array($col, ['id', 'created_at', 'updated_at'])) {
+                    continue;
+                }
 
                 // 🔗 الأعمدة المنتهية بـ _id (علاقات)
                 if (Str::endsWith($col, '_id')) {
                     $value = rand(1, 3);
                     $dataString .= "                '{$col}' => {$value},\n";
+
                     continue;
                 }
 
@@ -74,6 +77,7 @@ class ModelSeederService
                     $dataString .= "                    'en' => 'Sample {$col} {$i}',\n";
                     $dataString .= "                    'ar' => 'عينة {$col} {$i}'\n";
                     $dataString .= "                ],\n";
+
                     continue;
                 }
 
@@ -82,6 +86,7 @@ class ModelSeederService
                     $enumValues = self::getEnumValues($table, $col);
                     $value = $enumValues[0] ?? 'default';
                     $dataString .= "                '{$col}' => '{$value}',\n";
+
                     continue;
                 }
 
@@ -146,15 +151,16 @@ class {$model}Seeder extends Seeder
     {
         $type = DB::selectOne("SHOW COLUMNS FROM {$table} WHERE Field = '{$column}'")->Type ?? '';
         preg_match("/^enum\('(.*)'\)$/", $type, $matches);
+
         return isset($matches[1]) ? explode("','", $matches[1]) : [];
     }
 
     private static function updateMainSeeder($model)
     {
-        $mainSeederPath = database_path("seeders/DatabaseSeeder.php");
+        $mainSeederPath = database_path('seeders/DatabaseSeeder.php');
 
-        if (!File::exists($mainSeederPath)) {
-            File::put($mainSeederPath, "<?php
+        if (! File::exists($mainSeederPath)) {
+            File::put($mainSeederPath, '<?php
 
 namespace Database\\Seeders;
 
@@ -167,13 +173,13 @@ class DatabaseSeeder extends Seeder
         // Seeders will be added here
     }
 }
-");
+');
         }
 
         $content = File::get($mainSeederPath);
         $seederClass = "{$model}Seeder::class";
 
-        if (!str_contains($content, $seederClass)) {
+        if (! str_contains($content, $seederClass)) {
             if (preg_match('/public function run\(\): void\s*\{/', $content, $matches, PREG_OFFSET_CAPTURE)) {
                 $pos = $matches[0][1] + strlen($matches[0][0]);
                 $content = substr_replace($content, "\n        \$this->call({$seederClass});", $pos, 0);
