@@ -22,9 +22,9 @@ Route::prefix('v1/')->group(function () {
 
     });
    });
-                Route::get('withdraw', [WithdrawController::class, 'index']);
 
        Route::middleware(CheckJwtToken::class)->group(function () {
+                Route::get('withdraw', [WithdrawController::class, 'index']);
 
        // without auth routes
         Route::get('my-affiliate', [AffiliateController::class, 'myAffiliate']);
