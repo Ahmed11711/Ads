@@ -37,7 +37,8 @@ class AuthController extends Controller
             $userBalance = UserBalance::where('user_id', $user->id)->first();
             $user->balance = $userBalance->balance ?? 0;
             $user->balance_affiliate = $userBalance->affiliate_balance ?? 0;
-$user->myLink = config('app.url') . '/' . $user->affiliate_code;
+            $user->myLink = config('app.url') . '/' . $user->affiliate_code;
+            $user->count=User::where('referred_by',$user->affiliate_code)->count() ?? 0;
 
 
             return $this->successResponse([
