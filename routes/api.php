@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Affiliate\AffiliateController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Company\CompanyCOntroller;
 use App\Http\Controllers\Api\Notifications\NotificationsController;
 use App\Http\Controllers\Api\OfferwallIntegrations\AdGemController;
 use App\Http\Controllers\Api\OfferwallIntegrations\AyetStudioController;
@@ -27,11 +28,13 @@ Route::prefix('v1/')->group(function () {
     });
 
     Route::middleware(CheckJwtToken::class)->group(function () {
+        Route::get('withdraw', [WithdrawController::class, 'index']);
+
         // without auth routes
         Route::get('my-affiliate', [AffiliateController::class, 'myAffiliate']);
         Route::get('notification', [NotificationsController::class, 'index']);
+
         Route::post('withdraw', [WithdrawController::class, 'Withdraw']);
-        Route::get('withdraw', [WithdrawController::class, 'index']);
         Route::post('add-balance', [WithdrawController::class, 'addBalance']);
     });
 
@@ -52,6 +55,9 @@ Route::prefix('v1/')->group(function () {
         Route::get('generate-link', 'generateOfferLink');
         Route::get('webhook', 'onOfferComplete');
     });
+
+    Route::get('companies', [CompanyCOntroller::class, 'index']);
+    Route::get('settings', [CompanyCOntroller::class, 'setting']);
 });
 
 require __DIR__.'/admin.php';
