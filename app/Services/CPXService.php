@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\DTOs\CPXDto;
+use App\DTOs\CPX\CpxDto;
 use App\DTOs\ResponseDto\ServiceResponseDto;
 use Illuminate\Support\Facades\Http;
 
@@ -21,7 +21,7 @@ class CPXService
         $this->hash = config('services.cpx.hash');
     }
 
-    public function getServeys(CPXDto $dto, array $params = []): ServiceResponseDto
+    public function getOfferWall(CpxDto $dto, array $params = []): ServiceResponseDto
     {
         $url = "{$this->baseUrl}/get-surveys.php";
 
@@ -34,7 +34,11 @@ class CPXService
             ...$params,
         ];
 
-        $response = Http::timeout(5)->get($url, $queryParam);
+        try {
+            $response = Http::timeout(5)->get($url, $queryParam);
+        } catch (\Throwable $th) {
+            return ServiceResponseDto::error('Failed to fetch surveys');
+        }
 
         if (! $response->successful()) {
             return ServiceResponseDto::error('Failed to fetch surveys');
@@ -44,5 +48,10 @@ class CPXService
             ->setMessage('Surveys fetched successfully')
             ->setData($response->json())
             ->setStatus(200);
+    }
+
+    public function generateOfferLink(): string
+    {
+        return '';
     }
 }

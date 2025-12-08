@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\DTOs\ResponseDto\RepositoryResponseDto;
+use App\DTOs\ResponseDto\ServiceResponseDto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
@@ -127,6 +129,31 @@ trait ApiResponseTrait
                 ],
             ], $code);
         }
+    }
 
+    /**
+     * Respond with DTO success - returns full structure
+     */
+    protected function respondDto(ServiceResponseDto|RepositoryResponseDto $response): JsonResponse
+    {
+        if ($response->isSuccess()) {
+            if ($response->data) {
+                return $this->successResponse(
+                    $response->data,
+                    $response->message,
+                    $response->statusCode
+                );
+            } else {
+                return $this->successResponse(
+                    message: $response->message,
+                    status: $response->statusCode
+                );
+            }
+        } else {
+            return $this->errorResponse(
+                message: $response->message,
+                status: $response->statusCode
+            );
+        }
     }
 }

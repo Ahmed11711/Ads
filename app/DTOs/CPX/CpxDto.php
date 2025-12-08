@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\DTOs;
+namespace App\DTOs\CPX;
 
-class CPXDto
+class CpxDto
 {
     public function __construct(
         public ?string $extUserId,
         public ?string $ipUser
     ) {}
 
-    public static function fromArray(array $data): self
+    public static function fromRequest(array $data): self
     {
         return new self(
             extUserId: $data['ext_user_id'] ?? null,

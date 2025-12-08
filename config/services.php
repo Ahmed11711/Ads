@@ -35,19 +35,22 @@ return [
         ],
     ],
 
-    'ayetstudios' => [
-        'api_key' => env('AYETSTUDIOS_API_KEY'),
+    'ayet_studios' => [
+        'app_key' => env('AYET_STUDIOS_APP_KEY'),
+        'identifier' => env('AYET_STUDIOS_IDENTIFIER'),
+        'adslot' => env('AYET_STUDIOS_ADSLOT'),
         'url' => 'https://www.ayetstudios.com',
     ],
 
     'adgem' => [
         'api_key' => env('ADGEM_API_KEY'),
+        'secret' => env('ADGEM_SECRET'),
         'url' => 'https://offer-api.adgem.com',
     ],
 
     'cpx' => [
         'app_id' => env('CPX_API_ID'),
-        'url' => 'https://live-api.cpx-research.com/api',
         'hash' => env('CPX_API_HASH'),
+        'url' => 'https://live-api.cpx-research.com/api',
     ],
 ];
