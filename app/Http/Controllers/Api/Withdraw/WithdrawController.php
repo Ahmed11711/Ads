@@ -46,8 +46,9 @@ class WithdrawController extends Controller
        
         $data['user_id'] = $user->id;
          $withdraw = withdraw::create($data);
+         $withdraw->status='pending';
 
-        return $this->successResponse($data, 'Withdrawal request submitted successfully.');
+        return $this->successResponse($withdraw, 'Withdrawal request submitted successfully.');
     }
 
     public function addBalance(AddBalanceRequest $request)
