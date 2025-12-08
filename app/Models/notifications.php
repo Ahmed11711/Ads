@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class notifications extends Model
 {
-    //
+    protected $guarded = [];
 
     public function user()
     {
