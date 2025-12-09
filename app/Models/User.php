@@ -11,65 +11,81 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+ /** @use HasFactory<\Database\Factories\UserFactory> */
+ use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'affiliate_code',
-        'otp',
-        'is_verified',
-        'phone',
-        'profile_image',
-        'address',
-        'role',
-        'fcm_token',
-        'referred_by',
-        
-    ];
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+ /**
+  * The attributes that are mass assignable.
+  *
+  * @var list<string>
+  */
+ protected $fillable = [
+  'name',
+  'email',
+  'password',
+  'affiliate_code',
+  'otp',
+  'is_verified',
+  'phone',
+  'profile_image',
+  'address',
+  'role',
+  'fcm_token',
+  'referred_by',
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+ ];
+ /**
+  * The attributes that should be hidden for serialization.
+  *
+  * @var list<string>
+  */
+ protected $hidden = [
+  'password',
+  'remember_token',
+ ];
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+ /**
+  * Get the attributes that should be cast.
+  *
+  * @return array<string, string>
+  */
+ protected function casts(): array
+ {
+  return [
+   'email_verified_at' => 'datetime',
+   'password' => 'hashed',
+  ];
+ }
 
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+ public function getJWTIdentifier()
+ {
+  return $this->getKey();
+ }
 
-    public function balance()
-{
-    return $this->hasOne(UserBalance::class, 'user_id');
-}
+ public function getJWTCustomClaims()
+ {
+  return [];
+ }
 
+ public function balance()
+ {
+  return $this->hasOne(UserBalance::class, 'user_id');
+ }
+ protected static function boot()
+ {
+  parent::boot();
+
+  static::creating(function ($user) {
+   // لو مش موجود affiliate_code، اعمل واحد جديد
+   if (empty($user->affiliate_code)) {
+    $user->affiliate_code = self::generateAffiliateCode();
+   }
+  });
+ }
+
+ // دالة لتوليد الكود
+ private static function generateAffiliateCode()
+ {
+  return 'AFF-' . strtoupper(uniqid());
+ }
 }
