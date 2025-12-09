@@ -10,17 +10,18 @@ use Illuminate\Http\Request;
 
 class CompanyCOntroller extends Controller
 {
-    use ApiResponseTrait;
-    public function index()
-    {
-        $company=Company::get();
-        return $this->successResponse($company,'All Companies',200);
+ use ApiResponseTrait;
+ public function index()
+ {
+  $company = Company::get();
+  return $this->successResponse($company, 'All Companies', 200);
+ }
 
-    }
+ public function setting()
+ {
+  $settings = setting::get();
+  $settingsObject = $settings->pluck('value', 'key')->toArray();
 
-    public function setting()
-    {
-        $settings=setting::get();
-        return $this->successResponse($settings,'All settings',200);
-    }
+  return $this->successResponse($settingsObject, 'All settings', 200);
+ }
 }
