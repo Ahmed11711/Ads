@@ -10,16 +10,19 @@ use App\Http\Requests\Api\Auth\ScoialLoginRequest;
 use App\Http\Requests\Api\Auth\UPdateProfileRequest;
 use App\Http\Requests\Api\Auth\VerifyAffiliateRequest;
 use App\Http\Requests\Api\Auth\VerifyEmailRequest;
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Models\User;
 use App\Models\userBalance;
 use App\Models\withdraw;
 use App\Traits\ApiResponseTrait;
 use App\Traits\OTPTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Kreait\Firebase\Factory;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Kreait\Firebase\Factory;
 
 
 class AuthController extends Controller
@@ -279,5 +282,32 @@ class AuthController extends Controller
    'token' => $token,
    'token_type' => 'Bearer',
   ]);
+ }
+ public function forgotPassword(ForgotPasswordRequest $request)
+ {
+  $user = User::where('email', $request->email)->first();
+
+  $otp = rand(100000, 999999); // OTP 6 أرقام
+  $user->otp = $otp;
+  $user->save();
+
+  return $this->successResponse($otp, 'OTP sent successfully');
+ }
+
+ public function resetPassword(ResetPasswordRequest $request)
+ {
+  $user = User::where('email', $request->email)->first();
+
+  if ($user->otp !== $request->otp) {
+   return $this->successResponse("Invalid OTP");
+  }
+
+
+
+  $user->password = Hash::make($request->password);
+  $user->otp = null;
+  $user->save();
+
+  return $this->successResponse("Password reset successfully");
  }
 }

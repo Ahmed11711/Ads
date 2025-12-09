@@ -16,6 +16,9 @@ Route::prefix('v1/')->group(function () {
   Route::post('verify-email', [AuthController::class, 'verifyEmail']);
   Route::post('verify-affiliate', [AuthController::class, 'verifyAffiliate']);
   Route::post('resend-otp', [AuthController::class, 'resendOtp']);
+  Route::post('forget-password' . [AuthController::class, 'forgotPassword']);
+  Route::post('rest-password' . [AuthController::class, 'resetPassword']);
+
 
   Route::middleware(CheckJwtToken::class)->group(function () {
    Route::post('logout', [AuthController::class, 'logout']);

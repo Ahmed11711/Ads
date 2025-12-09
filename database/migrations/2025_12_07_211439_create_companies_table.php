@@ -11,21 +11,19 @@ return new class extends Migration
   */
  public function up(): void
  {
-  if (!Schema::hasTable('companies')) {
-   Schema::create('companies', function (Blueprint $table) {
-    $table->id();
-    $table->string('name');
-    $table->string('logo')->nullable();
-    $table->enum('type', ['ads', 'tasks', 'survey', 'games', 'other'])->default('other');
-    $table->enum('status', ['active', 'inactive'])->default('active');
-    $table->text('description')->nullable();
-    $table->string('amount');
-    $table->text('url');
-    $table->timestamps();
-   });
-  }
- }
+  Schema::create('companies', function (Blueprint $table) {
+   $table->id();
+   $table->string('name');
+   $table->string('logo')->nullable();
+   $table->enum('type', ['ads', 'tasks', 'survey', 'games', 'other'])->default('other');
+   $table->enum('status', ['active', 'inactive'])->default('active');
+   $table->text('description')->nullable();
+   $table->string('amount');
+   $table->text('url');
 
+   $table->timestamps();
+  });
+ }
 
  /**
   * Reverse the migrations.
