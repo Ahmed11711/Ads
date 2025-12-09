@@ -1,13 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\CheckJwtToken;
+use App\Http\Controllers\Api\Ads\MyHistroryController;
+use App\Http\Controllers\Api\Affiliate\AffiliateController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Company\CompanyCOntroller;
-use App\Http\Controllers\Api\Withdraw\WithdrawController;
-use App\Http\Controllers\Api\Affiliate\AffiliateController;
+use App\Http\Controllers\Api\Notification\NotificationController;
 use App\Http\Controllers\Api\Notifications\NotificationsController;
+use App\Http\Controllers\Api\Withdraw\WithdrawController;
+use App\Http\Middleware\CheckJwtToken;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+
+
 
 Route::prefix('v1/')->group(function () {
  Route::prefix('auth/')->group(function () {
@@ -51,6 +55,7 @@ Route::prefix('v1/')->group(function () {
   Route::post('add-balance', [WithdrawController::class, 'addBalance']);
   Route::get('companies', [CompanyCOntroller::class, 'index']);
   Route::post('/send-notification', [NotificationController::class, 'send']);
+  Route::get('my-history-ads', [MyHistroryController::class, 'index']);
  });
 });
 
