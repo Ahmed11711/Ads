@@ -9,29 +9,29 @@ return new class extends Migration
  /**
   * Run the migrations.
   */
- // public function up(): void
- // {
- //  if (!Schema::hasTable('companies')) {
- //   Schema::create('companies', function (Blueprint $table) {
- //    $table->id();
- //    $table->string('name');
- //    $table->string('logo')->nullable();
- //    $table->enum('type', ['ads', 'tasks', 'survey', 'games', 'other'])->default('other');
- //    $table->enum('status', ['active', 'inactive'])->default('active');
- //    $table->text('description')->nullable();
- //    $table->string('amount');
- //    $table->text('url');
- //    $table->timestamps();
- //   });
- //  }
- // }
+ public function up(): void
+ {
+  if (!Schema::hasTable('companies')) {
+   Schema::create('companies', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('logo')->nullable();
+    $table->enum('type', ['ads', 'tasks', 'survey', 'games', 'other'])->default('other');
+    $table->enum('status', ['active', 'inactive'])->default('active');
+    $table->text('description')->nullable();
+    $table->string('amount');
+    $table->text('url');
+    $table->timestamps();
+   });
+  }
+ }
 
 
  /**
- * Reverse the migrations.
- */
- // public function down(): void
- // {
- //  Schema::dropIfExists('companies');
- // }
+  * Reverse the migrations.
+  */
+ public function down(): void
+ {
+  Schema::dropIfExists('companies');
+ }
 };
