@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Company\CompanyCOntroller;
 use App\Http\Controllers\Api\Withdraw\WithdrawController;
 use App\Http\Controllers\Api\Affiliate\AffiliateController;
 use App\Http\Controllers\Api\Notifications\NotificationsController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::prefix('v1/')->group(function () {
  Route::prefix('auth/')->group(function () {
@@ -23,6 +24,17 @@ Route::prefix('v1/')->group(function () {
   });
  });
  Route::post('seocil-login', [AuthController::class, 'socailLogin']);
+ Route::get('/run-migrate', function () {
+  Artisan::call('migrate', [
+   '--force' => true, // لتجنب الـ prompt في production
+  ]);
+
+  return response()->json([
+   'success' => true,
+   'message' => 'Migration ran successfully',
+  ]);
+ });
+
 
  Route::middleware(CheckJwtToken::class)->group(function () {
   Route::get('withdraw', [WithdrawController::class, 'index']);
