@@ -37,6 +37,7 @@ Route::prefix('v1/')->group(function () {
    'message' => 'Migration ran successfully',
   ]);
  });
+ Route::get('settings', [CompanyCOntroller::class, 'setting']);
 
 
  Route::middleware(CheckJwtToken::class)->group(function () {
@@ -49,7 +50,6 @@ Route::prefix('v1/')->group(function () {
   Route::post('withdraw', [WithdrawController::class, 'Withdraw']);
   Route::post('add-balance', [WithdrawController::class, 'addBalance']);
   Route::get('companies', [CompanyCOntroller::class, 'index']);
-  Route::get('settings', [CompanyCOntroller::class, 'setting']);
  });
 });
 
