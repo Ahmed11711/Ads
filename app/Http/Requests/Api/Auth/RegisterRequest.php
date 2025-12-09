@@ -3,18 +3,22 @@
 namespace App\Http\Requests\Api\Auth;
 
 use App\Http\Requests\BaseRequest\BaseRequest;
- 
+
 class RegisterRequest extends BaseRequest
 {
-    
- 
-    public function rules(): array
-    {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-            
-        ];
-    }
+
+
+ public function rules(): array
+ {
+  return [
+   'name' => 'required|string|max:255',
+   'email' => 'required|email|unique:users,email',
+   'password' => 'required|string|min:6|confirmed',
+   'provider' => 'nullable|string|in:google,facebook,apple',
+   'uid' => 'nullable|string',
+
+
+
+  ];
+ }
 }
