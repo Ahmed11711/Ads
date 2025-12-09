@@ -28,31 +28,59 @@ class AuthController extends Controller
 
  public function login(loginRequest $request)
  {
-  $credentials = $request->only('email', 'password');
-  try {
-   if (!$token = JWTAuth::attempt($credentials)) {
-    return $this->errorResponse('Invalid credentials', 401);
+  $data = $request->validated();
+
+  if (!empty($data['provider']) && !empty($data['uid'])) {
+   // Social Login
+   $user = User::where('email', $data['email'])->first();
+
+   if (!$user) {
+    // لو مش موجود، create user تلقائي
+    $user = User::create([
+     'name' => $data['name'] ?? 'User',
+     'email' => $data['email'],
+     'provider' => $data['provider'],
+     'firebase_uid' => $data['uid'],
+     'avatar' => $data['photo'] ?? null,
+     'password' => bcrypt(Str::random(20)), // dummy password
+     'email_verified_at' => now(),
+    ]);
    }
-   $user = auth()->user();
-   $user->fcm_token = $request->fcm_token;
-   $user->save();
-   $user->token = $token;
-
-   $userBalance = UserBalance::where('user_id', $user->id)->first();
-   $user->balance = $userBalance->balance ?? 0;
-   $user->balance_affiliate = $userBalance->affiliate_balance ?? 0;
-   $user->myLink = config('app.url') . '/' . $user->affiliate_code;
-   $user->count = User::where('referred_by', $user->affiliate_code)->count() ?? 0;
-   $user->count_withdraw_pending = withdraw::where('user_id', $user->id)->where('status', 'pending')->count() ?? 0;
-
-
-   return $this->successResponse([
-    'user'  => $user,
-   ], 'Login successful', 200);
-  } catch (JWTException $e) {
-   return $this->errorResponse('Could not create token', 500);
+   $token = JWTAuth::fromUser($user);
+  } else {
+   // Normal login
+   $credentials = $request->only('email', 'password');
+   try {
+    if (!$token = JWTAuth::attempt($credentials)) {
+     return $this->errorResponse('Invalid credentials', 401);
+    }
+    $user = auth()->user();
+   } catch (JWTException $e) {
+    return $this->errorResponse('Could not create token', 500);
+   }
   }
+
+  // تحديث FCM token لو موجود
+  if (!empty($data['fcm_token'])) {
+   $user->fcm_token = $data['fcm_token'];
+   $user->save();
+  }
+
+  // بيانات إضافية
+  $userBalance = UserBalance::where('user_id', $user->id)->first();
+  $user->balance = $userBalance->balance ?? 0;
+  $user->balance_affiliate = $userBalance->affiliate_balance ?? 0;
+  $user->myLink = config('app.url') . '/' . $user->affiliate_code;
+  $user->count = User::where('referred_by', $user->affiliate_code)->count() ?? 0;
+  $user->count_withdraw_pending = withdraw::where('user_id', $user->id)->where('status', 'pending')->count() ?? 0;
+
+  $user->token = $token;
+
+  return $this->successResponse([
+   'user' => $user,
+  ], 'Login successful', 200);
  }
+
 
  public function register(RegisterRequest $request)
  {
