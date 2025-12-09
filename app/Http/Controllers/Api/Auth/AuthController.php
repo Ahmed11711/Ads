@@ -56,15 +56,32 @@ class AuthController extends Controller
 
  public function register(RegisterRequest $request)
  {
-  $validatedData = $request->validated();
-  $validatedData['affiliate_code'] = $this->generateAffiliateCode();
-  $validatedData['otp'] = $this->generateOtp(6);
-  $user = User::create($validatedData);
+  $data = $request->validated();
+
+  // إذا social login
+  if (!empty($data['provider']) && !empty($data['uid'])) {
+   $user = User::updateOrCreate(
+    ['email' => $data['email']],
+    [
+     'name' => $data['name'],
+     'provider' => $data['provider'],
+     'firebase_uid' => $data['uid'],
+     'avatar' => $data['photo'] ?? null,
+     'password' => bcrypt(Str::random(20)), // dummy password
+     'email_verified_at' => now(),
+    ]
+   );
+  } else {
+   //    
+   $data['password'] = bcrypt($data['password']);
+   $user = User::create($data);
+  }
+
   $token = JWTAuth::fromUser($user);
 
   return $this->successResponse([
    'token' => $token,
-   'user'  => $user,
+   'user' => $user,
   ], 'User registered successfully', 201);
  }
 
