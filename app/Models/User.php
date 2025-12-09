@@ -80,12 +80,21 @@ class User extends Authenticatable implements JWTSubject
    if (empty($user->affiliate_code)) {
     $user->affiliate_code = self::generateAffiliateCode();
    }
+
+   // لو مش موجود otp، اعمل واحد جديد
+   if (empty($user->otp)) {
+    $user->otp = self::generateOtp(6);
+   }
   });
  }
 
- // دالة لتوليد الكود
- private static function generateAffiliateCode()
+ // دالة لتوليد OTP
+ private static function generateOtp($length = 6)
  {
-  return 'AFF-' . strtoupper(uniqid());
+  $otp = '';
+  for ($i = 0; $i < $length; $i++) {
+   $otp .= mt_rand(0, 9);
+  }
+  return $otp;
  }
 }
