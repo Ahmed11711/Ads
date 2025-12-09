@@ -1,13 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\CheckJwtToken;
+use App\Http\Controllers\Api\Affiliate\AffiliateController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Company\CompanyCOntroller;
-use App\Http\Controllers\Api\Withdraw\WithdrawController;
-use App\Http\Controllers\Api\Affiliate\AffiliateController;
 use App\Http\Controllers\Api\Notifications\NotificationsController;
+use App\Http\Controllers\Api\Withdraw\WithdrawController;
+use App\Http\Middleware\CheckJwtToken;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
+
 
 Route::prefix('v1/')->group(function () {
  Route::prefix('auth/')->group(function () {
@@ -25,14 +27,28 @@ Route::prefix('v1/')->group(function () {
  });
  Route::post('seocil-login', [AuthController::class, 'socailLogin']);
  Route::get('/run-migrate', function () {
-  Artisan::call('migrate', [
-   '--force' => true, // لتجنب الـ prompt في production
-  ]);
+  try {
+   $tables = ['companies', 'users', 'orders']; // ضع كل الجداول اللي ممكن تعمل مشكلة
 
-  return response()->json([
-   'success' => true,
-   'message' => 'Migration ran successfully',
-  ]);
+   foreach ($tables as $table) {
+    if (Schema::hasTable($table)) {
+     // لو موجود، ممكن نطبع رسالة أو نتخطاه
+     continue;
+    }
+   }
+
+   Artisan::call('migrate', ['--force' => true]);
+
+   return response()->json([
+    'success' => true,
+    'message' => 'Migration ran successfully',
+   ]);
+  } catch (\Exception $e) {
+   return response()->json([
+    'success' => false,
+    'message' => $e->getMessage(),
+   ], 500);
+  }
  });
 
 
