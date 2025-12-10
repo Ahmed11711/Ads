@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Company;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAdsRequest;
+use App\Http\Resources\myAdsResource;
 use App\Models\Company;
 use App\Models\setting;
 use App\Models\userWithAds;
@@ -46,6 +47,8 @@ class CompanyCOntroller extends Controller
    'is_active' => '1'
 
   ]);
+
+  return $this->successResponse(myAdsResource::collection($userAds));
 
   return $this->successResponse($userAds, 'success to store ads');
  }
