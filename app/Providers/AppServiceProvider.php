@@ -2,25 +2,25 @@
 
 namespace App\Providers;
 
-use App\Repositories\userAds\userAdsRepositoryInterface;
-use App\Repositories\userAds\userAdsRepository;
 
 
-use App\Repositories\setting\settingRepositoryInterface;
-use App\Repositories\setting\settingRepository;
-
-use App\Repositories\Company\CompanyRepositoryInterface;
 use App\Repositories\Company\CompanyRepository;
+use App\Repositories\Company\CompanyRepositoryInterface;
 
-use App\Repositories\notifications\notificationsRepositoryInterface;
 use App\Repositories\notifications\notificationsRepository;
+use App\Repositories\notifications\notificationsRepositoryInterface;
 
-use App\Repositories\withdraw\withdrawRepositoryInterface;
-use App\Repositories\withdraw\withdrawRepository;
+use App\Repositories\setting\settingRepository;
+use App\Repositories\setting\settingRepositoryInterface;
 
-use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\User\UserRepository;
+use App\Repositories\User\UserRepositoryInterface;
 
+use App\Repositories\userAds\userAdsRepository;
+use App\Repositories\userAds\userAdsRepositoryInterface;
+
+use App\Repositories\withdraw\withdrawRepository;
+use App\Repositories\withdraw\withdrawRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
