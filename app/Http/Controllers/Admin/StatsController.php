@@ -46,7 +46,7 @@ class StatsController extends Controller
   }
 
   // إيرادات الشركات
-  $company_revenues = Company::select('name', 'revenue')->get();
+  $company_revenues = Company::select('name', 'amount')->get();
 
   return response()->json([
    'total_users' => $total_users,
