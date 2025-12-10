@@ -29,9 +29,21 @@ class UserController extends BaseController
 
  public function update(Request $request, int $id): JsonResponse
  {
+  $response = parent::update($request, $id);
 
-  $users = parent::update($request, $id);
+  $data = $request->only(['balance', 'affiliate_balance']);
+  $user = $this->repository->find($id);
 
-  return $users;
+  if ($user && !empty(array_filter($data, fn($v) => $v !== null))) {
+   $user->balance()->updateOrCreate(
+    ['user_id' => $user->id],
+    $data
+   );
+  }
+
+  return $this->successResponse(
+   new $this->resourceClass($user->load('balance')),
+   'Record updated successfully'
+  );
  }
 }
