@@ -24,9 +24,23 @@ class MyHistroryController extends Controller
    })
    ->paginate(10);
 
-  return $this->successResponsePaginate(
-   myAdsResource::collection($userAds),
-   "Ads history retrieved successfully"
-  );
+  // حساب الـ summary
+  $summary = [
+   'daily_income' => $userAds->sum('amount'), // مجموع المبالغ المعروضة في الصفحة الحالية أو حسب حاجتك
+   'total_watch_today' => $userAds->count(), // عدد الإعلانات في الصفحة الحالية أو حسب حاجتك
+  ];
+
+  return response()->json([
+   'status' => true,
+   'message' => 'Ads history retrieved successfully',
+   'data' => myAdsResource::collection($userAds),
+   'meta' => [
+    'current_page' => $userAds->currentPage(),
+    'last_page' => $userAds->lastPage(),
+    'per_page' => $userAds->perPage(),
+    'total' => $userAds->total(),
+   ],
+   'summary' => $summary,
+  ]);
  }
 }
