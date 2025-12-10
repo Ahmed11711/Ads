@@ -43,6 +43,7 @@ class CompanyCOntroller extends Controller
    'company_id' => $data['company_id'],
    'amount' => 0.1,
    // 'status' => 'pending',
+   'is_active' => '1'
 
   ]);
 
