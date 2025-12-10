@@ -30,14 +30,13 @@ class UserController extends BaseController
 
  public function update(Request $request, int $id): JsonResponse
  {
-  // 1️⃣ تحديث البيانات الأساسية عن طريق BaseController
+  // تحديث البيانات الأساسية عن طريق BaseController
   $response = parent::update($request, $id);
 
-  // 2️⃣ نجيب الرصيد اللي اتبعت
+  // تحديث أو إنشاء record في جدول user_balances
   $data = $request->only(['balance', 'affiliate_balance']);
 
   if (!empty(array_filter($data, fn($v) => $v !== null))) {
-   // تحديث أو إنشاء record في جدول user_balances
    $balanceRecord = DB::table('user_balances')->where('user_id', $id)->first();
 
    if ($balanceRecord) {
@@ -47,17 +46,17 @@ class UserController extends BaseController
    }
   }
 
-  // 3️⃣ نجيب البيانات النهائية للـ user
+  // استرجاع اليوزر الأصلي
   $user = $this->repository->find($id);
+
+  // استرجاع الـ balance
   $balance = DB::table('user_balances')->where('user_id', $id)->first();
 
-  // حول الـ user من array/object لو لزم الأمر
-  $userArray = is_array($user) ? $user : $user->toArray();
-  $balanceArray = (array) $balance;
-  $finalData = (object) array_merge($userArray, ['balance' => $balanceArray]);
+  // تحويل الـ balance لكائن stdClass مؤقت
+  $user->balance = $balance;
 
   return $this->successResponse(
-   new $this->resourceClass($finalData),
+   new $this->resourceClass($user),
    'Record updated successfully'
   );
  }
