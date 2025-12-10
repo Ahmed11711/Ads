@@ -14,7 +14,7 @@ class notificationsStoreRequest extends BaseRequest
  public function rules(): array
  {
   return [
-   'user_id' => 'required|integer|exists:users,id',
+   // 'user_id' => 'required|integer|exists:users,id',
    'title' => 'required|string|max:255',
    'message' => 'required|string',
    'emails' => 'sometimes|array',

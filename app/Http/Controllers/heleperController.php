@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\notifications\notificationsStoreRequest;
 use Illuminate\Http\Request;
 
 class heleperController extends Controller
 {
- public function notification(Request $request)
+ public function notification(notificationsStoreRequest $request)
  {
-  return 555;
+  $data = $request->validated();
+  return $data;
  }
 }
