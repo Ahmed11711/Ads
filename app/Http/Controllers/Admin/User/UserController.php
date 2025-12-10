@@ -30,41 +30,38 @@ class UserController extends BaseController
 
  public function update(Request $request, int $id): JsonResponse
  {
-  // تحديث البيانات الأساسية عن طريق BaseController
+  // 1️⃣ تحديث البيانات الأساسية عن طريق BaseController
   $response = parent::update($request, $id);
 
- 
-$data = $request->only(['balance', 'affiliate_balance']);
+  // 2️⃣ تحديث أو إنشاء record في جدول user_balances
+  $data = $request->only(['balance', 'affiliate_balance']);
 
-if (!empty(array_filter($data, fn($v) => $v !== null))) {
-    $balanceRecord = DB::table('user_balances')->where('user_id', $id)->first();
+  if (!empty(array_filter($data, fn($v) => $v !== null))) {
+   $balanceRecord = DB::table('user_balances')->where('user_id', $id)->first();
 
-    if ($balanceRecord) {
-        // زيادة الرصيد الحالي بالقيم الجديدة
-        $updateData = [];
-        if (isset($data['balance'])) {
-            $updateData['balance'] = $balanceRecord->balance + $data['balance'];
-        }
-        if (isset($data['affiliate_balance'])) {
-            $updateData['affiliate_balance'] = $balanceRecord->affiliate_balance + $data['affiliate_balance'];
-        }
-
-        DB::table('user_balances')->where('user_id', $id)->update($updateData);
-    } else {
-        // لو مش موجود، نعمل إدخال جديد
-        DB::table('user_balances')->insert(array_merge(['user_id' => $id], $data));
+   if ($balanceRecord) {
+    // زيادة الرصيد الحالي بالقيم الجديدة
+    $updateData = [];
+    if (isset($data['balance'])) {
+     $updateData['balance'] = $balanceRecord->balance + $data['balance'];
+    }
+    if (isset($data['affiliate_balance'])) {
+     $updateData['affiliate_balance'] = $balanceRecord->affiliate_balance + $data['affiliate_balance'];
     }
 
+    DB::table('user_balances')->where('user_id', $id)->update($updateData);
+   } else {
+    // لو مش موجود، نعمل إدخال جديد
+    DB::table('user_balances')->insert(array_merge(['user_id' => $id], $data));
+   }
+  }
 
-  // استرجاع اليوزر الأصلي
+  // 3️⃣ استرجاع البيانات النهائية
   $user = $this->repository->find($id);
-
-  // استرجاع الـ balance
   $balance = DB::table('user_balances')->where('user_id', $id)->first();
-
-  // تحويل الـ balance لكائن stdClass مؤقت
   $user->balance = $balance;
 
+  // 4️⃣ التأكد إن كل المسارات ترجع JsonResponse
   return $this->successResponse(
    new $this->resourceClass($user),
    'Record updated successfully'
