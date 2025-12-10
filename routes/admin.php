@@ -23,10 +23,11 @@ Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(functi
  Route::apiResource('companies', CompanyController::class)->names('company');
  Route::apiResource('settings', settingController::class)->names('setting');
  Route::get('all-emails', function () {
+
   return User::select(['id', 'email'])->get();
  });
 });
 
 Route::apiResource('user_ads', UserAdsController::class)->names('user_ads');
 
-Route::prefix('v1')->group(function () {});
+Route::prefix('vd1')->group(function () {});
