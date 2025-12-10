@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class userWithAds extends Model
 {
  protected $table = 'user_ads';
+ protected $guarded = [];
 
  public function user()
  {
