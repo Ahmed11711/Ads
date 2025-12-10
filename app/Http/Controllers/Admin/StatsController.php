@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\StatsController;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Models\Withdrawal;

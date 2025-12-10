@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Company\CompanyController;
 use App\Http\Controllers\Admin\notifications\notificationsController;
 use App\Http\Controllers\Admin\setting\settingController;
-use App\Http\Controllers\Admin\StatsController\StatsController;
+use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\userWithAds\userWithAdsController;
 use App\Http\Controllers\Admin\withdraw\withdrawController;
