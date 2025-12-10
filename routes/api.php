@@ -32,7 +32,7 @@ Route::prefix('v1/')->group(function () {
  });
  Route::post('seocil-login', [AuthController::class, 'socailLogin']);
  Route::get('/run-migrate', function () {
-  Artisan::call('migrate:fresh', [
+  Artisan::call('migrate', [
    '--force' => true,
   ]);
 

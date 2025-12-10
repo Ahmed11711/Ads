@@ -22,5 +22,13 @@ class AdminUserSeeder extends Seeder
    'is_verified' => true,
    'role' => 'admin',
   ]);
+  User::create([
+   'name' => 'user',
+   'email' => 'user@gmail.com',
+   'password' => Hash::make('123123'), // تشفير كلمة المرور
+   'affiliate_code' => strtoupper(uniqid()), // كود افتراضي
+   'is_verified' => true,
+   'role' => 'user', // تأكد ان الدور صحيح
+  ]);
  }
 }
