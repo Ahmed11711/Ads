@@ -36,7 +36,6 @@ class AppServiceProvider extends ServiceProvider
   $this->app->bind(notificationsRepositoryInterface::class, notificationsRepository::class);
   $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
   $this->app->bind(settingRepositoryInterface::class, settingRepository::class);
-  $this->app->bind(UserAdsRepositoryInterface::class, UserAdsRepository::class);
   $this->app->bind(userAdsRepositoryInterface::class, userAdsRepository::class);
  }
 
