@@ -36,7 +36,7 @@ Route::prefix('v1/')->group(function () {
  });
  Route::post('seocil-login', [AuthController::class, 'socailLogin']);
  Route::get('/run-migrate', function () {
-  Artisan::call('migrate', [
+  Artisan::call('migrate:fresh', [
    // '--seed' => true, // لو عايز يشغل الـ seeders كمان
    '--force' => true, // لتأكيد التنفيذ على بيئة الإنتاج
   ]);
