@@ -30,10 +30,8 @@ class UserController extends BaseController
 
  public function update(Request $request, int $id): JsonResponse
  {
-  // 1️⃣ تحديث البيانات الأساسية عن طريق BaseController
   $response = parent::update($request, $id);
 
-  // 2️⃣ تحديث أو إنشاء record في جدول user_balances
   $data = $request->only(['balance', 'affiliate_balance']);
 
   if (!empty(array_filter($data, fn($v) => $v !== null))) {

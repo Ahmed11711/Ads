@@ -48,11 +48,12 @@ class CompanyCOntroller extends Controller
   $data = $request->validated();
 
   $company = Company::findOrFail($data['company_id']);
+  $priceAds = setting::where('key', 'price_ads')->value('value');
 
   $userAds = UserWithAds::create([
    'user_id'    => $user->id,
    'company_id' => $company->id,
-   'amount'     => 0.1,
+   'amount'     => $priceAds,      // القيمة المخزنة في settings
    'status'     => 'pending',
    'is_active'  => true,
    'type'       => $company->type,
