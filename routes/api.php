@@ -41,6 +41,13 @@ Route::prefix('v1/')->group(function () {
    'message' => 'Migration ran successfully',
   ]);
  });
+
+ Route::get('/run-seeder', function () {
+  Artisan::call('db:seed', [
+   '--force' => true,
+  ]);
+  return 'Database seeding completed!';
+ });
  Route::get('settings', [CompanyCOntroller::class, 'setting']);
 
 
