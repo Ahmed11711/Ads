@@ -22,7 +22,7 @@ class MyHistroryController extends Controller
    }, function ($query) {
     $query->whereIn('type', ['ads', 'survey']);
    })
-   ->get();
+   ->paginate(10);
 
   return $this->successResponsePaginate(
    myAdsResource::collection($userAds),
