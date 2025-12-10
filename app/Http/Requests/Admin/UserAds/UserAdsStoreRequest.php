@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Admin\UserAds;
+namespace App\Http\Requests\Admin\userAds;
 use App\Http\Requests\BaseRequest\BaseRequest;
-class UserAdsStoreRequest extends BaseRequest
+class userAdsStoreRequest extends BaseRequest
 {
     public function authorize(): bool
     {

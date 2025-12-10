@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Repositories\UserAds;
+namespace App\Repositories\userAds;
 
-use App\Repositories\UserAds\UserAdsRepositoryInterface;
+use App\Repositories\userAds\userAdsRepositoryInterface;
 use App\Repositories\BaseRepository\BaseRepository;
-use App\Models\UserAds;
+use App\Models\userAds;
 
-class UserAdsRepository extends BaseRepository implements UserAdsRepositoryInterface
+class userAdsRepository extends BaseRepository implements userAdsRepositoryInterface
 {
-    public function __construct(UserAds $model)
+    public function __construct(userAds $model)
     {
         parent::__construct($model);
     }

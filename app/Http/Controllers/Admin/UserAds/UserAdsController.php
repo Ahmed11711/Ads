@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Admin\UserAds;
+namespace App\Http\Controllers\Admin\userAds;
 
-use App\Repositories\UserAds\UserAdsRepositoryInterface;
+use App\Repositories\userAds\userAdsRepositoryInterface;
 use App\Http\Controllers\BaseController\BaseController;
-use App\Http\Requests\Admin\UserAds\UserAdsStoreRequest;
-use App\Http\Requests\Admin\UserAds\UserAdsUpdateRequest;
-use App\Http\Resources\Admin\UserAds\UserAdsResource;
+use App\Http\Requests\Admin\userAds\userAdsStoreRequest;
+use App\Http\Requests\Admin\userAds\userAdsUpdateRequest;
+use App\Http\Resources\Admin\userAds\userAdsResource;
 
-class UserAdsController extends BaseController
+class userAdsController extends BaseController
 {
-    public function __construct(UserAdsRepositoryInterface $repository)
+    public function __construct(userAdsRepositoryInterface $repository)
     {
         parent::__construct();
 
         $this->initService(
             repository: $repository,
-            collectionName: 'UserAds'
+            collectionName: 'userAds'
         );
 
-        $this->storeRequestClass = UserAdsStoreRequest::class;
-        $this->updateRequestClass = UserAdsUpdateRequest::class;
-        $this->resourceClass = UserAdsResource::class;
+        $this->storeRequestClass = userAdsStoreRequest::class;
+        $this->updateRequestClass = userAdsUpdateRequest::class;
+        $this->resourceClass = userAdsResource::class;
     }
 }

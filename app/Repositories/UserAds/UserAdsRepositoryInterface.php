@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories\UserAds;
+namespace App\Repositories\userAds;
 
 use App\Repositories\BaseRepository\BaseRepositoryInterface;
 
-interface UserAdsRepositoryInterface extends BaseRepositoryInterface
+interface userAdsRepositoryInterface extends BaseRepositoryInterface
 {
     //
 }

@@ -28,9 +28,9 @@ Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(functi
  });
 });
 
-Route::apiResource('user_ads', UserAdsController::class)->names('user_ads');
 Route::get('ss', function () {
  return "ss";
 });
+Route::apiResource('user_ads', userAdsController::class)->names('user_ads');
 
-Route::prefix('vd1')->group(function () {});
+Route::prefix('v1')->group(function () {});

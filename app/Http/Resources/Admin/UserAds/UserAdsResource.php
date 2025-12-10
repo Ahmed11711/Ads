@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Admin\UserAds;
+namespace App\Http\Resources\Admin\userAds;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserAdsResource extends JsonResource
+class userAdsResource extends JsonResource
 {
     public function toArray($request): array
     {

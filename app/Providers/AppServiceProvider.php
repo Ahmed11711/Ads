@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use App\Repositories\UserAds\UserAdsRepositoryInterface;
-use App\Repositories\UserAds\UserAdsRepository;
+use App\Repositories\userAds\userAdsRepositoryInterface;
+use App\Repositories\userAds\userAdsRepository;
+
 
 use App\Repositories\setting\settingRepositoryInterface;
 use App\Repositories\setting\settingRepository;
@@ -24,24 +25,26 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void {
-//
-        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-        $this->app->bind(withdrawRepositoryInterface::class, withdrawRepository::class);
-        $this->app->bind(notificationsRepositoryInterface::class, notificationsRepository::class);
-        $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
-        $this->app->bind(settingRepositoryInterface::class, settingRepository::class);
-        $this->app->bind(UserAdsRepositoryInterface::class, UserAdsRepository::class);
-}
+ /**
+  * Register any application services.
+  */
+ public function register(): void
+ {
+  //
+  $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+  $this->app->bind(withdrawRepositoryInterface::class, withdrawRepository::class);
+  $this->app->bind(notificationsRepositoryInterface::class, notificationsRepository::class);
+  $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
+  $this->app->bind(settingRepositoryInterface::class, settingRepository::class);
+  $this->app->bind(UserAdsRepositoryInterface::class, UserAdsRepository::class);
+  $this->app->bind(userAdsRepositoryInterface::class, userAdsRepository::class);
+ }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        //
-    }
+ /**
+  * Bootstrap any application services.
+  */
+ public function boot(): void
+ {
+  //
+ }
 }
