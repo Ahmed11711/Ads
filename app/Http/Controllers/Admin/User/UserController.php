@@ -29,6 +29,9 @@ class UserController extends BaseController
 
  public function update(Request $request, int $id): JsonResponse
  {
-  return parent::update($request, $id);
+
+  $users = parent::update($request, $id);
+
+  return $users;
  }
 }
