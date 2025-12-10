@@ -62,6 +62,7 @@ Route::prefix('v1/')->group(function () {
   Route::post('add-balance', [WithdrawController::class, 'addBalance']);
   Route::get('companies', [CompanyCOntroller::class, 'index']);
   Route::post('/send-notification', [NotificationController::class, 'send']);
+  Route::post('see-adds', [CompanyCOntroller::class, 'userAds']);
   Route::get('my-history-ads', [MyHistroryController::class, 'index']);
  });
 });

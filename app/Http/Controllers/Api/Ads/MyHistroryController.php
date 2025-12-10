@@ -15,6 +15,7 @@ class MyHistroryController extends Controller
   $data = [
    [
     'id' => 1,
+    'user_name' => "ahmed",
     'created_at' => now()->toDateTimeString(),
     'ads_id' => 101,
     'company_name' => 'Company A',
@@ -24,6 +25,8 @@ class MyHistroryController extends Controller
    ],
    [
     'id' => 2,
+    'user_name' => "awad",
+
     'created_at' => now()->subDay()->toDateTimeString(),
     'ads_id' => 102,
     'company_name' => 'Company B',
@@ -33,6 +36,8 @@ class MyHistroryController extends Controller
    ],
    [
     'id' => 3,
+    'user_name' => "ahmed",
+
     'created_at' => now()->subDays(2)->toDateTimeString(),
     'ads_id' => 103,
     'company_name' => 'Company C',
@@ -42,6 +47,8 @@ class MyHistroryController extends Controller
    ],
    [
     'id' => 4,
+    'user_name' => "ss",
+
     'created_at' => now()->subDays(3)->toDateTimeString(),
     'ads_id' => 104,
     'company_name' => 'Company D',
