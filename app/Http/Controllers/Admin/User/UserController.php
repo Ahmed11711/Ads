@@ -33,18 +33,28 @@ class UserController extends BaseController
   // تحديث البيانات الأساسية عن طريق BaseController
   $response = parent::update($request, $id);
 
-  // تحديث أو إنشاء record في جدول user_balances
-  $data = $request->only(['balance', 'affiliate_balance']);
+ 
+$data = $request->only(['balance', 'affiliate_balance']);
 
-  if (!empty(array_filter($data, fn($v) => $v !== null))) {
-   $balanceRecord = DB::table('user_balances')->where('user_id', $id)->first();
+if (!empty(array_filter($data, fn($v) => $v !== null))) {
+    $balanceRecord = DB::table('user_balances')->where('user_id', $id)->first();
 
-   if ($balanceRecord) {
-    DB::table('user_balances')->where('user_id', $id)->update($data);
-   } else {
-    DB::table('user_balances')->insert(array_merge(['user_id' => $id], $data));
-   }
-  }
+    if ($balanceRecord) {
+        // زيادة الرصيد الحالي بالقيم الجديدة
+        $updateData = [];
+        if (isset($data['balance'])) {
+            $updateData['balance'] = $balanceRecord->balance + $data['balance'];
+        }
+        if (isset($data['affiliate_balance'])) {
+            $updateData['affiliate_balance'] = $balanceRecord->affiliate_balance + $data['affiliate_balance'];
+        }
+
+        DB::table('user_balances')->where('user_id', $id)->update($updateData);
+    } else {
+        // لو مش موجود، نعمل إدخال جديد
+        DB::table('user_balances')->insert(array_merge(['user_id' => $id], $data));
+    }
+
 
   // استرجاع اليوزر الأصلي
   $user = $this->repository->find($id);
