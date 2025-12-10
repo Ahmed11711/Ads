@@ -22,6 +22,7 @@ class myAdsResource extends JsonResource
    'amount' => $this->amount,
    'status' => $this->status,
    'type' => $this->type ?? null,
+   'created_at' => $this->created_at,
   ];
  }
 }
