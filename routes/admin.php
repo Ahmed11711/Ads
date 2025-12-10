@@ -23,6 +23,7 @@ Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(functi
  Route::apiResource('companies', CompanyController::class)->names('company');
  Route::apiResource('settings', settingController::class)->names('setting');
  Route::apiResource('user_with_ads', userWithAdsController::class)->names('user_with_ads');
+ Route::get('dashboard', [StatsController::class, 'getStats']);
  Route::get('all-emails', function () {
 
   return User::select(['id', 'email'])->get();
