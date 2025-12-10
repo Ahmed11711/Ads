@@ -37,25 +37,27 @@ class UserController extends BaseController
   $data = $request->only(['balance', 'affiliate_balance']);
 
   if (!empty(array_filter($data, fn($v) => $v !== null))) {
-   // نحدث أو ننشئ السجل في جدول user_balances
-   $balanceRecord = \DB::table('user_balances')->where('user_id', $id)->first();
+   // تحديث أو إنشاء record في جدول user_balances
+   $balanceRecord = DB::table('user_balances')->where('user_id', $id)->first();
 
    if ($balanceRecord) {
-    // لو موجود نعمل تحديث
     DB::table('user_balances')->where('user_id', $id)->update($data);
    } else {
-    // لو مش موجود نعمل إنشاء جديد
     DB::table('user_balances')->insert(array_merge(['user_id' => $id], $data));
    }
   }
 
-  // 3️⃣ نرجع البيانات محدثة من جدول users
+  // 3️⃣ نجيب البيانات النهائية للـ user
   $user = $this->repository->find($id);
-  $balance = \DB::table('user_balances')->where('user_id', $id)->first();
-  $userData = array_merge((array)$user, ['balance' => $balance]);
+  $balance = DB::table('user_balances')->where('user_id', $id)->first();
+
+  // حول الـ user من array/object لو لزم الأمر
+  $userArray = is_array($user) ? $user : $user->toArray();
+  $balanceArray = (array) $balance;
+  $finalData = (object) array_merge($userArray, ['balance' => $balanceArray]);
 
   return $this->successResponse(
-   new $this->resourceClass($userData),
+   new $this->resourceClass($finalData),
    'Record updated successfully'
   );
  }
