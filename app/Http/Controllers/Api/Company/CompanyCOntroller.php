@@ -12,11 +12,20 @@ use Illuminate\Http\Request;
 class CompanyCOntroller extends Controller
 {
  use ApiResponseTrait;
- public function index()
+ public function index(Request $request)
  {
-  $company = Company::get();
-  return $this->successResponse($company, 'All Companies', 200);
+  $query = Company::query();
+
+  // لو في type في الريكوست، نفلتر
+  if ($type = $request->input('type')) {
+   $query->where('type', $type);
+  }
+
+  $companies = $query->get();
+
+  return $this->successResponse($companies, 'Companies retrieved successfully', 200);
  }
+
 
  public function setting()
  {
