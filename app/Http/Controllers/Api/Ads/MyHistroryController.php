@@ -24,7 +24,7 @@ class MyHistroryController extends Controller
    })
    ->get();
 
-  return $this->successResponse(
+  return $this->successResponsePaginate(
    myAdsResource::collection($userAds),
    "Ads history retrieved successfully"
   );

@@ -13,10 +13,9 @@ class NotificationController extends Controller
  use ApiResponseTrait;
  public function send(NotficatonRequest $request)
  {
-  $user = auth()->user(); // المستخدم المرسل
+  $user = auth()->user();
   $data = $request->validated();
 
-  // جلب المستخدم المستهدف
   $client = User::where('email', $data['email'])->first();
 
   if (!$client) {
