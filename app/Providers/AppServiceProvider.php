@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\userWithAds\userWithAdsRepositoryInterface;
+use App\Repositories\userWithAds\userWithAdsRepository;
+
 
 
 use App\Repositories\Company\CompanyRepository;
@@ -15,10 +18,6 @@ use App\Repositories\setting\settingRepositoryInterface;
 
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
-
-use App\Repositories\userAds\userAdsRepository;
-use App\Repositories\userAds\userAdsRepositoryInterface;
-
 use App\Repositories\withdraw\withdrawRepository;
 use App\Repositories\withdraw\withdrawRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -28,16 +27,15 @@ class AppServiceProvider extends ServiceProvider
  /**
   * Register any application services.
   */
- public function register(): void
- {
-  //
+ public function register(): void {
+//
   $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
   $this->app->bind(withdrawRepositoryInterface::class, withdrawRepository::class);
   $this->app->bind(notificationsRepositoryInterface::class, notificationsRepository::class);
   $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
   $this->app->bind(settingRepositoryInterface::class, settingRepository::class);
-  $this->app->bind(userAdsRepositoryInterface::class, userAdsRepository::class);
- }
+        $this->app->bind(userWithAdsRepositoryInterface::class, userWithAdsRepository::class);
+}
 
  /**
   * Bootstrap any application services.

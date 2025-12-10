@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class userAds extends Model
+class userWithAds extends Model
 {
  protected $table = 'user_ads';
 
