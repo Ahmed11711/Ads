@@ -42,7 +42,7 @@ class CompanyCOntroller extends Controller
    'user_id' => $user->id,
    'company_id' => $data['company_id'],
    'amount' => 0.1,
-   // 'status' => 'pending',
+   'status' => 'pending',
    'is_active' => '1'
 
   ]);

@@ -17,7 +17,8 @@ return new class extends Migration
    $table->integer('company_id');
    $table->enum('status', ['pending', 'complete', 'reject'])->default('pending')->change();
    $table->decimal('amount', 10, 2)->default(0);
-   $table->boolean('is_active');
+   $table->boolean('is_active')->default(true);
+
    $table->timestamps();
   });
  }
