@@ -18,14 +18,21 @@ class CompanyCOntroller extends Controller
  {
   $query = Company::where('status', 'active');
 
-  if ($type = $request->input('type')) {
-   $query->where('type', $type);
+  if ($request->filled('type')) {
+   $query->where('type', $request->type);
+  } else {
+   $query->where('type', '!=', 'tasks');
   }
 
   $companies = $query->get();
 
-  return $this->successResponse($companies, 'Companies retrieved successfully', 200);
+  return $this->successResponse(
+   $companies,
+   'Companies retrieved successfully',
+   200
+  );
  }
+
 
 
  public function setting()
