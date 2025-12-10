@@ -143,6 +143,8 @@ class AuthController extends Controller
   $user->myLink = config('app.url') . '/' . $user->affiliate_code;
   $user->count_team = User::where('referred_by', $user->affiliate_code)->count() ?? 0;
   $user->count_withdraw_pending = withdraw::where('user_id', $user->id)->where('status', 'pending')->count() ?? 0;
+  $token = JWTAuth::fromUser($user);
+  $user->token = $token;
 
 
   return $this->successResponse([
