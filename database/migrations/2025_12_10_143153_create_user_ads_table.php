@@ -13,9 +13,11 @@ return new class extends Migration
  {
   Schema::create('user_ads', function (Blueprint $table) {
    $table->id();
-   $table->unsignedBigInteger('user_id');
-   $table->unsignedBigInteger('company_id');
-   $table->enum('status',['pending','compalte','reject'])
+   $table->integer('user_id');
+   $table->integer('company_id');
+   $table->enum('status', ['pending', 'complete', 'reject'])->default('pending')->change();
+   $table->decimal('amount', 10, 2)->default(0);
+   $table->boolean('is_active');
    $table->timestamps();
   });
  }
