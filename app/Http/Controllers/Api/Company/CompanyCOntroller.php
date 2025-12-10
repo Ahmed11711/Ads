@@ -28,7 +28,7 @@ class CompanyCOntroller extends Controller
  public function userAds(UserAdsRequest $request)
  {
   $user = auth()->user();
-  $data = $request->validate();
+  $data = $request->all();
 
   return $this->successResponse($data, 'success to store ads');
  }
