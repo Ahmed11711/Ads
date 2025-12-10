@@ -36,6 +36,7 @@ Route::prefix('v1/')->group(function () {
    '--force' => true,
   ]);
 
+
   return response()->json([
    'success' => true,
    'message' => 'Migration ran successfully',
