@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\UserAds\UserAdsRepositoryInterface;
+use App\Repositories\UserAds\UserAdsRepository;
+
 use App\Repositories\setting\settingRepositoryInterface;
 use App\Repositories\setting\settingRepository;
 
@@ -31,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(notificationsRepositoryInterface::class, notificationsRepository::class);
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
         $this->app->bind(settingRepositoryInterface::class, settingRepository::class);
+        $this->app->bind(UserAdsRepositoryInterface::class, UserAdsRepository::class);
 }
 
     /**

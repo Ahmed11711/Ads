@@ -16,7 +16,6 @@ class CompanyCOntroller extends Controller
  {
   $query = Company::query();
 
-  // لو في type في الريكوست، نفلتر
   if ($type = $request->input('type')) {
    $query->where('type', $type);
   }
