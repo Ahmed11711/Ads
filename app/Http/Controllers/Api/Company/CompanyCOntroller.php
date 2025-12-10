@@ -48,7 +48,7 @@ class CompanyCOntroller extends Controller
 
   ]);
 
-  return $this->successResponse(myAdsResource::collection($userAds));
+  return $this->successResponse(new myAdsResource($userAds));
 
   return $this->successResponse($userAds, 'success to store ads');
  }
