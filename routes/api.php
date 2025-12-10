@@ -30,6 +30,10 @@ Route::prefix('v1/')->group(function () {
    Route::post('update-profile', [AuthController::class, 'updateProfile']);
   });
  });
+
+ Route::get('ahmed11711', function () {
+  return 555454;
+ });
  Route::post('seocil-login', [AuthController::class, 'socailLogin']);
  Route::get('/run-migrate', function () {
   Artisan::call('migrate:fresh', [
