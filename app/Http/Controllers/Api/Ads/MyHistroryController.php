@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Ads;
 
 use App\Http\Controllers\Controller;
+use App\Models\userWithAds;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,8 @@ class MyHistroryController extends Controller
 
  public function index()
  {
+  $user = auth()->user();
+  $userads = userWithAds::where('user_id', $user->id)->get();
   $data = [
    [
     'id' => 1,

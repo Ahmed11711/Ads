@@ -15,7 +15,7 @@ class CompanyCOntroller extends Controller
  use ApiResponseTrait;
  public function index(Request $request)
  {
-  $query = Company::query();
+  $query = Company::where('status', 'active');
 
   if ($type = $request->input('type')) {
    $query->where('type', $type);
