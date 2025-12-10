@@ -16,7 +16,7 @@ class AdminUserSeeder extends Seeder
  {
   User::create([
    'name' => 'Admin User',
-   'email' => 'admin@example.com',
+   'email' => 'admin1@example.com',
    'password' => Hash::make('password123'), // Change to a strong password
    'affiliate_code' => Str::upper(Str::random(10)),
    'is_verified' => true,
@@ -24,7 +24,7 @@ class AdminUserSeeder extends Seeder
   ]);
   User::create([
    'name' => 'user',
-   'email' => 'user@gmail.com',
+   'email' => 'user1@gmail.com',
    'password' => Hash::make('123123'), // تشفير كلمة المرور
    'affiliate_code' => strtoupper(uniqid()), // كود افتراضي
    'is_verified' => true,
