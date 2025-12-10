@@ -22,11 +22,11 @@ Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(functi
  Route::get('my-affiliate', [AuthController::class, 'myAffiliate']);
  Route::apiResource('companies', CompanyController::class)->names('company');
  Route::apiResource('settings', settingController::class)->names('setting');
- Route::apiResource('user_ads', UserAdsController::class)->names('user_ads');
  Route::get('all-emails', function () {
   return User::select(['id', 'email'])->get();
  });
 });
 
+Route::apiResource('user_ads', UserAdsController::class)->names('user_ads');
 
 Route::prefix('v1')->group(function () {});
