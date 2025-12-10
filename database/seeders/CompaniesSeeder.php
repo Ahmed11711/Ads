@@ -28,7 +28,7 @@ class CompaniesSeeder extends Seeder
     'name' => 'Company B',
     'logo' => null,
     'type' => 'tasks',
-    // 'status' => 'inactive',
+    'status' => 'inactive', // حددت status
     'description' => 'This is Company B description.',
     'amount' => '500',
     'url' => 'https://companyb.example.com',
@@ -39,7 +39,7 @@ class CompaniesSeeder extends Seeder
     'name' => 'Company C',
     'logo' => null,
     'type' => 'survey',
-    // 'status' => 'active',
+    'status' => 'active', // حددت status
     'description' => 'This is Company C description.',
     'amount' => '750',
     'url' => 'https://companyc.example.com',
