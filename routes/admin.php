@@ -22,6 +22,8 @@ Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(functi
  Route::get('my-affiliate', [AuthController::class, 'myAffiliate']);
  Route::apiResource('companies', CompanyController::class)->names('company');
  Route::apiResource('settings', settingController::class)->names('setting');
+ Route::apiResource('user_ads', userAdsController::class)->names('user_ads');
+
  Route::get('all-emails', function () {
 
   return User::select(['id', 'email'])->get();
@@ -31,6 +33,5 @@ Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(functi
 Route::get('ss', function () {
  return "ss";
 });
-Route::apiResource('user_ads', userAdsController::class)->names('user_ads');
 
 Route::prefix('v1')->group(function () {});
