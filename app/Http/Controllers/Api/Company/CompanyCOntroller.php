@@ -38,18 +38,23 @@ class CompanyCOntroller extends Controller
  public function userAds(UserAdsRequest $request)
  {
   $user = auth()->user();
-  $data = $request->all();
-  $userAds = userWithAds::create([
-   'user_id' => $user->id,
-   'company_id' => $data['company_id'],
-   'amount' => 0.1,
-   // 'status' => 'pending',
-   'is_active' => '1'
+  $data = $request->validated();
 
+  $company = Company::findOrFail($data['company_id']);
+
+  $userAds = UserWithAds::create([
+   'user_id'    => $user->id,
+   'company_id' => $company->id,
+   'amount'     => 0.1,
+   'status'     => 'pending',
+   'is_active'  => true,
+   'type'       => $company->type,
   ]);
 
-  return $this->successResponse(new myAdsResource($userAds));
-
-  return $this->successResponse($userAds, 'success to store ads');
+  return $this->successResponse(
+   new MyAdsResource($userAds),
+   'Ad created successfully',
+   201
+  );
  }
 }

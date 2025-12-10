@@ -15,7 +15,8 @@ return new class extends Migration
    $table->id();
    $table->integer('user_id');
    $table->integer('company_id');
-   $table->enum('status', ['pending', 'complete', 'reject'])->default('pending')->change();
+   $table->enum('status', ['pending', 'complete', 'reject'])->default('pending');
+   $table->string('type')->nullable();
    $table->decimal('amount', 10, 2)->default(0);
    $table->boolean('is_active')->default(true);
 
