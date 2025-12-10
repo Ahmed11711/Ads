@@ -78,6 +78,7 @@ class AuthController extends Controller
   $user->count_withdraw_pending = withdraw::where('user_id', $user->id)->where('status', 'pending')->count() ?? 0;
 
   $user->token = $token;
+  $user->otp = $user->otp ?? null;
 
   return $this->successResponse([
    'user' => $user,
@@ -109,6 +110,8 @@ class AuthController extends Controller
   }
 
   $token = JWTAuth::fromUser($user);
+  $user->otp = $user->otp ?? null;
+
 
   return $this->successResponse([
    'token' => $token,
