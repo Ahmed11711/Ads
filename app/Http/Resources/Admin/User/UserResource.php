@@ -25,6 +25,7 @@ class UserResource extends JsonResource
    'role' => $this->role,
    'balance' => 0,
    'balance_affiliate' => 0,
+   'last_login_at' => $this->updated_at,
    'created_at' => $this->created_at,
    'updated_at' => $this->updated_at,
   ];
