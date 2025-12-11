@@ -18,22 +18,18 @@ class WithdrawController extends Controller
  {
   $user = auth()->user();
 
-  // البيانات المصفحة
   $withdrawals = withdraw::where('user_id', $user->id)
    ->orderBy('created_at', 'desc')
    ->paginate(10);
 
-  // إجمالي الفلوس المسحوبة المكتملة
-  $totalWithdrawn = withdraw::where('user_id', $user->id)
-   ->where('status', 'complete')  // شرط الاكتمال
-   ->sum('amount');
+  // إضافة البيانات الإضافية
+  $withdrawals->appends([
+   'total_withdrawn' => withdraw::where('user_id', $user->id)
+    ->where('status', 'complete')
+    ->sum('amount')
+  ]);
 
-  $data = [
-   'withdrawals' => $withdrawals,
-   'total_withdrawn' => $totalWithdrawn,
-
-  ];
-  return $this->successResponsePaginate($data, 'User withdrawals retrieved successfully');
+  return $this->successResponsePaginate($withdrawals, 'User withdrawals retrieved successfully');
  }
 
 

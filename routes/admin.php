@@ -15,12 +15,13 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 
-Route::apiResource('users', UserController::class)->names('user')->except('put');
 
 
 Route::post('admin/v1/login', [AuthController::class, 'login'])->name('admin.login');
 Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(function () {
  Route::patch('users/{user}', [UserController::class, 'update']);
+ Route::apiResource('users', UserController::class)->names('user')->except('put');
+
  Route::apiResource('withdraws', withdrawController::class)->names('withdraw');
  Route::apiResource('notifications', notificationsController::class)->names('notifications')->except('post');
  Route::post('notifications', [heleperController::class, 'notification']);

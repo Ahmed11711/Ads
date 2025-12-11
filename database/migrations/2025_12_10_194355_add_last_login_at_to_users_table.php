@@ -11,13 +11,7 @@ return new class extends Migration
   */
  public function up(): void
  {
-  Schema::table('users', function (Blueprint $table) {
-   $table->timestamp('last_login_at')->nullable()->after('remember_token');
-   $table->string('bank_name')->nullable();
-   $table->string('iban')->nullable();
-   $table->string('country')->nullable();
-   $table->string('wallet')->nullable();
-  });
+  Schema::table('users', function (Blueprint $table) {});
  }
 
  /**
