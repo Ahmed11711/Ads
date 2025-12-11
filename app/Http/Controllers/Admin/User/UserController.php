@@ -34,7 +34,7 @@ class UserController extends BaseController
  {
   try {
    // 1️⃣ جايب الـ query من الريبو
-   $query = $this->repository->query()->with('balance'); // هنا عملنا eager load للعلاقة
+   return  $query = $this->repository->query()->with('balance'); // هنا عملنا eager load للعلاقة
 
    // 2️⃣ البحث على أي حقل
    if ($search = $request->input('search')) {
