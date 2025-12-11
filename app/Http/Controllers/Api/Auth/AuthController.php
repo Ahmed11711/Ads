@@ -326,10 +326,13 @@ class AuthController extends Controller
 
   $netBalance = $balance?->balance ?? 0;              // لو مش موجود نرجع صفر
   $affiliateBalance = $balance?->affiliate_balance ?? 0;
-
+  $totalWithdrawn = withdraw::where('user_id', $user->id)
+   ->where('status', 'confirmed')
+   ->sum('amount');
   return $this->successResponse([
    'balance' => $netBalance,
-   'affiliate_balance' => $affiliateBalance
+   'affiliate_balance' => $affiliateBalance,
+   'total_withdraw' => $totalWithdrawn,
   ], 'User balance retrieved successfully');
  }
 }
