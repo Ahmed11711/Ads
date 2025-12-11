@@ -18,7 +18,7 @@ class WithdrawController extends Controller
  {
   $user = auth()->user();
 
-  // استرجاع الـ withdrawals مع pagination
+  // استرجاع المسحوبات مع pagination
   $withdrawals = withdraw::where('user_id', $user->id)
    ->orderBy('created_at', 'desc')
    ->paginate(10);
@@ -28,11 +28,15 @@ class WithdrawController extends Controller
    ->where('status', 'complete')
    ->sum('amount');
 
-  // ارجع الـ Paginator مع total_withdrawn كـ extra field
-  return $this->successResponsePaginate([
-   'data' => $withdrawals,
-   'total_withdrawn' => $totalWithdrawn
-  ], 'User withdrawals retrieved successfully');
+  // إضافة البيانات الإضافية للـ paginator باستخدام additional (لو تستخدم Resource)
+  // لو مش عندك Resource، ممكن تستخدم appends()
+  $withdrawals->appends(['total_withdrawn' => $totalWithdrawn]);
+
+  // ارجع النتيجة مع الـ pagination
+  return $this->successResponsePaginate(
+   $withdrawals,
+   'User withdrawals retrieved successfully'
+  );
  }
 
 
