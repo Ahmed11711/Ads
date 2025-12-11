@@ -318,4 +318,19 @@ class AuthController extends Controller
 
   return $this->successResponse("Password reset successfully");
  }
+
+ public function getBalance(Request $request)
+ {
+  $user = auth()->user();
+
+  $balance = userBalance::where('user_id', $user->id)->first();
+
+  $netBalance = $balance?->balance ?? 0;              // لو مش موجود نرجع صفر
+  $affiliateBalance = $balance?->affiliate_balance ?? 0;
+
+  return $this->successResponse([
+   'balance' => $netBalance,
+   'affiliate_balance' => $affiliateBalance
+  ], 'User balance retrieved successfully');
+ }
 }

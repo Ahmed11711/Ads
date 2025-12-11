@@ -27,6 +27,7 @@ Route::prefix('v1/')->group(function () {
   Route::middleware(CheckJwtToken::class)->group(function () {
    Route::post('logout', [AuthController::class, 'logout']);
    Route::get('me', [AuthController::class, 'me']);
+   Route::get('my-balance', [AuthController::class, 'getBalance']);
    Route::post('update-profile', [AuthController::class, 'updateProfile']);
   });
  });
