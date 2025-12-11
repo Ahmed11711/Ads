@@ -47,6 +47,8 @@ class AuthController extends Controller
      'avatar' => $data['photo'] ?? null,
      'password' => bcrypt(Str::random(20)), // dummy password
      'email_verified_at' => now(),
+     'last_login_at' => now(),
+
     ]);
    }
    $token = JWTAuth::fromUser($user);
@@ -101,6 +103,7 @@ class AuthController extends Controller
      'avatar' => $data['photo'] ?? null,
      'password' => bcrypt(Str::random(20)), // dummy password
      'email_verified_at' => now(),
+     'last_login_at' => now(),
     ]
    );
   } else {
