@@ -22,15 +22,16 @@ class WithdrawController extends Controller
    ->orderBy('created_at', 'desc')
    ->paginate(10);
 
-  // إضافة البيانات الإضافية
-  $withdrawals->appends([
-   'total_withdrawn' => withdraw::where('user_id', $user->id)
-    ->where('status', 'complete')
-    ->sum('amount')
-  ]);
+  $totalWithdrawn = withdraw::where('user_id', $user->id)
+   ->where('status', 'complete')
+   ->sum('amount');
 
-  return $this->successResponsePaginate($withdrawals, 'User withdrawals retrieved successfully');
+  $withdrawalsData = $withdrawals->toArray();
+  $withdrawalsData['total_withdrawn'] = $totalWithdrawn;
+
+  return $this->successResponsePaginate($withdrawalsData, 'User withdrawals retrieved successfully');
  }
+
 
 
  public function withdraw(WithdrawRequest $request)
