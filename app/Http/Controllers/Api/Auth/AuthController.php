@@ -38,7 +38,6 @@ class AuthController extends Controller
    $user = User::where('email', $data['email'])->first();
 
    if (!$user) {
-    // لو مش موجود، create user تلقائي
     $user = User::create([
      'name' => $data['name'] ?? 'User',
      'email' => $data['email'],
