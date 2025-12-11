@@ -32,10 +32,9 @@ class UserController extends BaseController
 
  public function index(Request $request): JsonResponse
  {
-  return 55555;
   try {
    // 1️⃣ جايب الـ query من الريبو
-   return  $query = $this->repository->query()->with('balance'); // هنا عملنا eager load للعلاقة
+   $query = $this->repository->query()->with('balance'); // هنا عملنا eager load للعلاقة
 
    // 2️⃣ البحث على أي حقل
    if ($search = $request->input('search')) {
