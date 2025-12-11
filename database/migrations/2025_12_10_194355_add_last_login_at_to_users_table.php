@@ -16,6 +16,7 @@ return new class extends Migration
    $table->string('bank_name')->nullable();
    $table->string('iban')->nullable();
    $table->string('country')->nullable();
+   $table->string('wallet')->nullable();
   });
  }
 

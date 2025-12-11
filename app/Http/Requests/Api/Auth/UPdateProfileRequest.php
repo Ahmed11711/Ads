@@ -11,21 +11,25 @@ class UPdateProfileRequest extends BaseRequest
 
 
 
-    public function rules(): array
-    {
-        $userId = $this->route('user') ?? optional($this->user())->id;
+ public function rules(): array
+ {
+  $userId = $this->route('user') ?? optional($this->user())->id;
 
-        return [
-            'name' => 'sometimes|string|max:255',
-            'email' => [
-                'sometimes',
-                'email',
-                Rule::unique('users', 'email')->ignore($userId),
-            ],
-            'password' => 'sometimes|string|min:6',
-            'phone'=>'sometimes|string|max:20',
-            'address'=>'sometimes|string|max:500',
-            'profile_image'=>'sometimes|file|max:2048',
-        ];
-    }
+  return [
+   'name' => 'sometimes|string|max:255',
+   'email' => [
+    'sometimes',
+    'email',
+    Rule::unique('users', 'email')->ignore($userId),
+   ],
+   'password' => 'sometimes|string|min:6',
+   'phone' => 'sometimes|string|max:20',
+   'address' => 'sometimes|string|max:500',
+   'profile_image' => 'sometimes|file|max:2048',
+   'bank_name' => 'sometimes|string',
+   'iban' => 'sometimes|string',
+   'country' => 'sometimes|string',
+   'wallet' => 'sometimes|string'
+  ];
+ }
 }
