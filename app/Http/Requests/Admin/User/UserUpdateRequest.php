@@ -24,6 +24,9 @@ class UserUpdateRequest extends BaseRequest
    'remember_token' => 'nullable|sometimes|string|max:100',
    'balance' => 'nullable|sometimes',
    'affiliate_balance' => 'nullable|sometimes',
+   'bank_name' => 'nullable|string|max:250',
+   'iban' => 'nullable|string',
+   'wallet' => 'nullable|string',
   ];
  }
 }
