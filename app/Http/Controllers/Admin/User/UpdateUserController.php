@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserUpdateRequest;
+use App\Http\Resources\Admin\User\UserResource;
 use App\Models\User;
 use App\Models\UserBalance;
 use App\Traits\ApiResponseTrait;
@@ -16,7 +17,8 @@ class UpdateUserController extends Controller
 
  public function index()
  {
-  return $user = User::with('balance')->get();
+  $user = User::with('balance')->get();
+  return $this->successResponse(UserResource::collection($user), 'sss');
  }
  public function update(UserUpdateRequest $request, $id)
  {
