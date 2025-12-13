@@ -10,17 +10,17 @@ use App\Http\Resources\Admin\withdraw\withdrawResource;
 
 class withdrawController extends BaseController
 {
-    public function __construct(withdrawRepositoryInterface $repository)
-    {
-        parent::__construct();
+ public function __construct(withdrawRepositoryInterface $repository)
+ {
+  parent::__construct();
 
-        $this->initService(
-            repository: $repository,
-            collectionName: 'withdraw'
-        );
+  $this->initService(
+   repository: $repository,
+   collectionName: 'withdraw'
+  );
 
-        $this->storeRequestClass = withdrawStoreRequest::class;
-        $this->updateRequestClass = withdrawUpdateRequest::class;
-        $this->resourceClass = withdrawResource::class;
-    }
+  $this->storeRequestClass = withdrawStoreRequest::class;
+  $this->updateRequestClass = withdrawUpdateRequest::class;
+  $this->resourceClass = withdrawResource::class;
+ }
 }

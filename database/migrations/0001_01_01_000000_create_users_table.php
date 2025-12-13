@@ -26,12 +26,7 @@ return new class extends Migration
    $table->string('address')->nullable();
    $table->enum('role', ['admin', 'user'])->default('user');
    $table->text('fcm_token')->nullable();
-   $table->timestamp('last_login_at')->nullable()->after('remember_token');
 
-   $table->string('bank_name')->nullable();
-   $table->string('iban')->nullable();
-   $table->string('country')->nullable();
-   $table->string('wallet')->nullable();
    $table->rememberToken();
    $table->timestamps();
   });

@@ -77,12 +77,10 @@ class User extends Authenticatable implements JWTSubject
   parent::boot();
 
   static::creating(function ($user) {
-   // لو مش موجود affiliate_code، اعمل واحد جديد
    if (empty($user->affiliate_code)) {
     $user->affiliate_code = User::generateAffiliateCode();
    }
 
-   // لو مش موجود otp، اعمل واحد جديد
    if (empty($user->otp)) {
     $user->otp = User::generateOtp(6);
    }

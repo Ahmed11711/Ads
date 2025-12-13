@@ -11,7 +11,9 @@ return new class extends Migration
   */
  public function up(): void
  {
-  Schema::table('users', function (Blueprint $table) {});
+  Schema::table('withdraws', function (Blueprint $table) {
+   $table->string('transaction_id')->unique();
+  });
  }
 
  /**
@@ -19,6 +21,8 @@ return new class extends Migration
   */
  public function down(): void
  {
-  Schema::table('users', function (Blueprint $table) {});
+  Schema::table('withdraws', function (Blueprint $table) {
+   //
+  });
  }
 };
