@@ -36,39 +36,39 @@ Route::prefix('v1/')->group(function () {
   return 55545455555555;
  });
  Route::post('seocil-login', [AuthController::class, 'socailLogin']);
- Route::get('/run-migrate', function () {
-  Artisan::call('migrate', [
-   // '--seed' => true, // لو عايز يشغل الـ seeders كمان
-   '--force' => true, // لتأكيد التنفيذ على بيئة الإنتاج
-  ]);
+ // Route::get('/run-migrate', function () {
+ //  Artisan::call('migrate', [
+ //   // '--seed' => true, // لو عايز يشغل الـ seeders كمان
+ //   '--force' => true, // لتأكيد التنفيذ على بيئة الإنتاج
+ //  ]);
 
 
-  return response()->json([
-   'success' => true,
-   'message' => 'Migration ran successfully',
-  ]);
- });
- Route::get('/run-storage-link', function () {
+ //  return response()->json([
+ //   'success' => true,
+ //   'message' => 'Migration ran successfully',
+ //  ]);
+ // });
+ // Route::get('/run-storage-link', function () {
 
-  // لو اللينك موجود قبل كده، امسحه
-  if (File::exists(public_path('storage'))) {
-   File::delete(public_path('storage'));
-  }
+ //  // لو اللينك موجود قبل كده، امسحه
+ //  if (File::exists(public_path('storage'))) {
+ //   File::delete(public_path('storage'));
+ //  }
 
-  Artisan::call('storage:link');
+ //  Artisan::call('storage:link');
 
-  return response()->json([
-   'status' => true,
-   'message' => 'Storage link created successfully',
-  ]);
- });
+ //  return response()->json([
+ //   'status' => true,
+ //   'message' => 'Storage link created successfully',
+ //  ]);
+ // });
 
- Route::get('/run-seeder', function () {
-  Artisan::call('db:seed', [
-   '--force' => true,
-  ]);
-  return 'Database seeding completed!';
- });
+ // Route::get('/run-seeder', function () {
+ //  Artisan::call('db:seed', [
+ //   '--force' => true,
+ //  ]);
+ //  return 'Database seeding completed!';
+ // });
  Route::get('settings', [CompanyCOntroller::class, 'setting']);
 
 

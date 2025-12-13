@@ -212,7 +212,8 @@ class AuthController extends Controller
   if ($request->hasFile('profile_image')) {
    $file = $request->file('profile_image');
 
-   $validatedData['profile_image'] = $this->updateProfile($request);
+   $path = $file->store('profile_images', 'public');
+   $validatedData['profile_image'] = $path;
   }
 
   if (isset($validatedData['password'])) {
@@ -357,6 +358,7 @@ class AuthController extends Controller
    $filename
   );
 
+  // حذف الصورة القديمة لو موجودة
   if ($user && $user->profile_image) {
    $oldPath = public_path($user->profile_image);
    if (file_exists($oldPath)) {
