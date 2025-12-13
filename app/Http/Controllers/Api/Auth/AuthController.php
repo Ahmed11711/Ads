@@ -64,20 +64,17 @@ class AuthController extends Controller
    }
   }
 
-  // تحديث FCM token لو موجود
   if (!empty($data['fcm_token'])) {
    $user->fcm_token = $data['fcm_token'];
    $user->save();
   }
 
-  // بيانات إضافية
   $userBalance = UserBalance::where('user_id', $user->id)->first();
   $user->balance = $userBalance->balance ?? 0;
   $user->balance_affiliate = $userBalance->affiliate_balance ?? 0;
   $user->myLink = config('app.url') . '/' . $user->affiliate_code;
   $user->count = User::where('referred_by', $user->affiliate_code)->count() ?? 0;
   $user->count_withdraw_pending = withdraw::where('user_id', $user->id)->where('status', 'pending')->count() ?? 0;
-
   $user->token = $token;
   $user->otp = $user->otp ?? null;
 
@@ -150,6 +147,9 @@ class AuthController extends Controller
   $user->count_withdraw_pending = withdraw::where('user_id', $user->id)->where('status', 'pending')->count() ?? 0;
   $token = JWTAuth::fromUser($user);
   $user->token = $token;
+  $profileImage = $user->profile_image
+   ? 'http://astar.zayamrock.com/storage/' . ltrim($user->profile_image, '/')
+   : null;
 
 
 
