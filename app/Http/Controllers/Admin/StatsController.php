@@ -21,13 +21,16 @@ class StatsController extends Controller
   $total_revenue = Company::sum('amount');
 
   $pending_withdrawals = withdraw::where('status', 'pending')->count();
+  $confirmedWithdraw = withdraw::where('amount', 'confirmed')->sum('amount');
 
   $company_revenues = Company::select('name', 'amount')->get();
 
   return response()->json([
    'total_users' => $total_users,
+   'total_user_active' => 5,
    'total_revenue' => $total_revenue,
    'pending_withdrawals' => $pending_withdrawals,
+   'confirmed_withdraw' => $confirmedWithdraw,
    'company_revenues' => $company_revenues
   ]);
  }
