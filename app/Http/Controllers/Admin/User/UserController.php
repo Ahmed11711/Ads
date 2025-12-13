@@ -79,7 +79,6 @@ class UserController extends BaseController
   $balance = DB::table('user_balances')->where('user_id', $id)->first();
   $user->balance = $balance;
 
-  // 5️⃣ إعادة JsonResponse
   return $this->successResponse(
    new $this->resourceClass($user),
    'Record updated successfully'

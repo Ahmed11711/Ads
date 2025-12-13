@@ -27,6 +27,7 @@ class UserUpdateRequest extends BaseRequest
    'bank_name' => 'nullable|string|max:250',
    'iban' => 'nullable|string',
    'wallet' => 'nullable|string',
+   'phone' => 'nullable|string',
   ];
  }
 }
