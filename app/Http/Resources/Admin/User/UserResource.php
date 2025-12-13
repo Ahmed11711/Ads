@@ -23,7 +23,7 @@ class UserResource extends JsonResource
    'address' => $this->address,
    'profile_image' => $this->profile_image,
    'role' => $this->role,
-   'balance' => $this->balance_value,
+   'balance' => $this->balance->balance ?? 0,
    'affiliate_balance' => $this->affiliate_balance_value,
 
    'last_login_at' => $this->updated_at,
