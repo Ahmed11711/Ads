@@ -32,6 +32,7 @@ class UPdateProfileRequest extends BaseRequest
    'wallet' => 'sometimes|string',
    'gender' => 'sometimes|string',
    'age'    => 'sometimes|string',
+   'country' => 'sometimes|string'
   ];
  }
 }
