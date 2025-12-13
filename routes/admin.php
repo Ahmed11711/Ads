@@ -15,7 +15,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('users/', [UpdateUserController::class, 'index']);
 
 
 Route::post('admin/v1/login', [AuthController::class, 'login'])->name('admin.login');

@@ -30,36 +30,56 @@ class UserController extends BaseController
 
  public function update(Request $request, int $id): JsonResponse
  {
+  // 1️⃣ تنفيذ التحديثات العادية عبر الريبو
   $response = parent::update($request, $id);
 
+  // 2️⃣ جلب البيانات المطلوبة للتعديل
   $data = $request->only(['balance', 'affiliate_balance']);
 
+  // 3️⃣ التحقق من وجود أي قيمة للتحديث
   if (!empty(array_filter($data, fn($v) => $v !== null))) {
+
+   // جلب سجل المستخدم من جدول user_balances
    $balanceRecord = DB::table('user_balances')->where('user_id', $id)->first();
 
    if ($balanceRecord) {
-    // زيادة الرصيد الحالي بالقيم الجديدة
+    // لو السجل موجود → تحديث القيم الموجودة فقط
     $updateData = [];
-    if (isset($data['balance'])) {
+
+    if (array_key_exists('balance', $data)) {
      $updateData['balance'] = $balanceRecord->balance + $data['balance'];
     }
-    if (isset($data['affiliate_balance'])) {
+    if (array_key_exists('affiliate_balance', $data)) {
      $updateData['affiliate_balance'] = $balanceRecord->affiliate_balance + $data['affiliate_balance'];
     }
 
-    DB::table('user_balances')->where('user_id', $id)->update($updateData);
+    if (!empty($updateData)) {
+     DB::table('user_balances')->where('user_id', $id)->update($updateData);
+    }
    } else {
-    // لو مش موجود، نعمل إدخال جديد
-    DB::table('user_balances')->insert(array_merge(['user_id' => $id], $data));
+    // لو السجل غير موجود → إدخال فقط القيم الموجودة في الـ request
+    $insertData = ['user_id' => $id];
+
+    if (array_key_exists('balance', $data)) {
+     $insertData['balance'] = $data['balance'];
+    }
+    if (array_key_exists('affiliate_balance', $data)) {
+     $insertData['affiliate_balance'] = $data['affiliate_balance'];
+    }
+
+    // لو فيه قيم للتخزين → insert
+    if (count($insertData) > 1) {
+     DB::table('user_balances')->insert($insertData);
+    }
    }
   }
 
-  // 3️⃣ استرجاع البيانات النهائية
+  // 4️⃣ استرجاع البيانات النهائية
   $user = $this->repository->find($id);
   $balance = DB::table('user_balances')->where('user_id', $id)->first();
   $user->balance = $balance;
 
-  // 4️⃣ التأكد إن كل المسارات ترجع JsonResponse
+  // 5️⃣ إعادة JsonResponse
   return $this->successResponse(
    new $this->resourceClass($user),
    'Record updated successfully'
