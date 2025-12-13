@@ -152,6 +152,7 @@ class AuthController extends Controller
   $user->token = $token;
 
 
+
   return $this->successResponse([
    'user' => $user,
   ], 'User details fetched successfully', 200);
@@ -294,7 +295,7 @@ class AuthController extends Controller
  {
   $user = User::where('email', $request->email)->first();
 
-  $otp = rand(100000, 999999); // OTP 6 أرقام
+  $otp = rand(100000, 999999);
   $user->otp = $otp;
   $user->save();
 

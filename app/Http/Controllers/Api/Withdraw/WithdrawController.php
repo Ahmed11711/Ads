@@ -62,9 +62,7 @@ class WithdrawController extends Controller
   $userBalance[$balanceType] -= $data['amount'];
   $userBalance->save();
 
-  if ($data['method'] == 'games') {
-   $data['method'] = 'bank_dollar';
-  }
+
 
   $data['user_id'] = $user->id;
   $withdraw = withdraw::create($data);
