@@ -16,7 +16,20 @@ class UpdateUserController extends Controller
 
  public function index()
  {
-  return $user = User::with('balance')->get();
+  $users = User::select('users.*')
+   ->selectSub(function ($query) {
+    $query->from('user_balances')
+     ->select('balance')
+     ->whereColumn('user_balances.user_id', 'users.id')
+     ->limit(1);
+   }, 'balance')
+   ->selectSub(function ($query) {
+    $query->from('user_balances')
+     ->select('affiliate_balance')
+     ->whereColumn('user_balances.user_id', 'users.id')
+     ->limit(1);
+   }, 'affiliate_balance')
+   ->get();
  }
  public function update(UserUpdateRequest $request, $id)
  {
