@@ -20,7 +20,7 @@ Route::get('users/', [UpdateUserController::class, 'index']);
 
 Route::post('admin/v1/login', [AuthController::class, 'login'])->name('admin.login');
 Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(function () {
- Route::apiResource('users', UserController::class)->names('user')->except(['put', 'get']);
+ Route::apiResource('users', UserController::class)->names('user')->except(['put']);
 
  Route::patch('users/{user}', [UserController::class, 'update']);
 
