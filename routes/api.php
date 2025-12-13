@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Withdraw\WithdrawController;
 use App\Http\Middleware\CheckJwtToken;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 
 
@@ -45,6 +46,20 @@ Route::prefix('v1/')->group(function () {
   return response()->json([
    'success' => true,
    'message' => 'Migration ran successfully',
+  ]);
+ });
+ Route::get('/run-storage-link', function () {
+
+  // لو اللينك موجود قبل كده، امسحه
+  if (File::exists(public_path('storage'))) {
+   File::delete(public_path('storage'));
+  }
+
+  Artisan::call('storage:link');
+
+  return response()->json([
+   'status' => true,
+   'message' => 'Storage link created successfully',
   ]);
  });
 
