@@ -211,8 +211,8 @@ class AuthController extends Controller
 
   if ($request->hasFile('profile_image')) {
    $file = $request->file('profile_image');
-   $path = $file->store('profile_images', 'public');
-   $validatedData['profile_image'] = $path;
+
+   $validatedData['profile_image'] = $this->updateProfile($request);
   }
 
   if (isset($validatedData['password'])) {
@@ -335,5 +335,38 @@ class AuthController extends Controller
    'affiliate_balance' => $affiliateBalance,
    'total_withdraw' => $totalWithdrawn,
   ], 'User balance retrieved successfully');
+ }
+
+ protected function uploadProfileImage(
+  Request $request,
+  array $validated,
+  $user = null
+ ): array {
+
+  if (!$request->hasFile('profile_image')) {
+   return $validated;
+  }
+
+  $file = $request->file('profile_image');
+
+  $filename = time() . '_' . $file->getClientOriginalName();
+
+  // رفع مباشر داخل public/uploads/profile_images
+  $file->move(
+   public_path('uploads/profile_images'),
+   $filename
+  );
+
+  if ($user && $user->profile_image) {
+   $oldPath = public_path($user->profile_image);
+   if (file_exists($oldPath)) {
+    unlink($oldPath);
+   }
+  }
+
+  // تخزين path فقط
+  $validated['profile_image'] = 'uploads/profile_images/' . $filename;
+
+  return $validated;
  }
 }
