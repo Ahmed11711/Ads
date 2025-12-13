@@ -14,10 +14,10 @@ return new class extends Migration
   Schema::table('users', function (Blueprint $table) {
    // $table->timestamp('last_login_at')->nullable();
 
-   $table->string('bank_name')->nullable();
-   $table->string('iban')->nullable();
-   $table->string('country')->nullable();
-   $table->string('wallet')->nullable();
+   // $table->string('bank_name')->nullable();
+   // $table->string('iban')->nullable();
+   // $table->string('country')->nullable();
+   // $table->string('wallet')->nullable();
   });
  }
 
