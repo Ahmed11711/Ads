@@ -100,8 +100,8 @@ class AuthController extends Controller
      'password' => bcrypt(Str::random(20)), // dummy password
      'email_verified_at' => now(),
      'last_login_at' => now(),
-     'gender' => $data['gender'],
-     'age' => $data['age'],
+     'gender' => $data['gender']  ?? null,
+     'age' => $data['age'] ?? null,
     ]
    );
   } else {
