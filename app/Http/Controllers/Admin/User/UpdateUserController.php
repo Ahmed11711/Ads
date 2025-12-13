@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\UserUpdateRequest;
 use App\Models\User;
-use App\Models\userBalance;
+use App\Models\UserBalance;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 
@@ -30,7 +30,7 @@ class UpdateUserController extends Controller
     'affiliate_balance' => $request->affiliate_balance ?? 0,
    ];
 
-   userBalance::updateOrCreate(
+   UserBalance::updateOrCreate(
     ['user_id' => $user->id],
     $balanceData
    );
