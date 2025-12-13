@@ -67,34 +67,41 @@ class User extends Authenticatable implements JWTSubject
  {
   return [];
  }
- protected $with = ['balance'];
+ protected static function boot()
+ {
+  parent::boot();
+
+  static::created(function ($user) {
+   $user->balance()->create([
+    'balance' => 0,
+    'affiliate_balance' => 0,
+   ]);
+  });
+
+  static::creating(function ($user) {
+   if (empty($user->affiliate_code)) {
+    $user->affiliate_code = self::generateAffiliateCode();
+   }
+
+   if (empty($user->otp)) {
+    $user->otp = self::generateOtp(6);
+   }
+  });
+ }
+
+ // protected $with = ['balance'];
 
  public function balance()
  {
   return $this->hasOne(UserBalance::class, 'user_id');
  }
- protected static function boot()
- {
-  parent::boot();
 
-  static::creating(function ($user) {
-   if (empty($user->affiliate_code)) {
-    $user->affiliate_code = User::generateAffiliateCode();
-   }
 
-   if (empty($user->otp)) {
-    $user->otp = User::generateOtp(6);
-   }
-  });
- }
-
- // دالة لتوليد الكود
  public static function generateAffiliateCode()
  {
   return 'AFF-' . strtoupper(uniqid());
  }
 
- // دالة لتوليد OTP
  public static function generateOtp($length = 6)
  {
   $otp = '';
