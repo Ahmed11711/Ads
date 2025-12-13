@@ -16,7 +16,7 @@ class UpdateUserController extends Controller
 
  public function index()
  {
-  return $user = User::get();
+  return $user = User::with('balance')->get();
  }
  public function update(UserUpdateRequest $request, $id)
  {
