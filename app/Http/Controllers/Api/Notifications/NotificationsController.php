@@ -13,7 +13,12 @@ class NotificationsController extends Controller
  public function index(Request $request)
  {
   $user = auth()->user();
-  $notifications = notifications::where('user_id', $user->id)->paginate(10);
+  $notifications = Notifications::where(function ($query) use ($user) {
+   $query->where('user_id', $user->id)
+    ->orWhere('type', 'all');
+  })
+   ->latest()
+   ->paginate(10);
   return $this->successResponsePaginate($notifications, 'Notifications retrieved successfully.');
  }
 }
