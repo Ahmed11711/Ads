@@ -20,11 +20,13 @@ class UserStoreRequest extends BaseRequest
    'password' => 'required|string|max:255',
    'affiliate_code' => 'required|string|max:255|unique:users,affiliate_code',
    'otp' => 'nullable|string|max:6',
-   'is_verified' => 'required|integer',
+   'is_verified' => 'nullable|integer',
    'remember_token' => 'nullable|string|max:100',
    'bank_name' => 'nullable|string|max:250',
    'iban' => 'nullable|string',
    'wallet' => 'nullable|string',
+   'phone' => 'nullable|string',
+
   ];
  }
 }

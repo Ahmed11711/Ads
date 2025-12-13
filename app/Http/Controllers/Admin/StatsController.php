@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\RigetSupply;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\UserBalance;
 use App\Models\withdraw;
 
 class StatsController extends Controller
@@ -24,6 +25,7 @@ class StatsController extends Controller
   $confirmedWithdraw = withdraw::where('status', 'confirmed')->sum('amount');
 
   $company_revenues = Company::select('name', 'amount')->get();
+  $totalMoney = UserBalance::sum('balance') + UserBalance::sum('affiliate_balance');
 
   return response()->json([
    'total_users' => $total_users,
@@ -31,7 +33,8 @@ class StatsController extends Controller
    'total_revenue' => $total_revenue,
    'pending_withdrawals' => $pending_withdrawals,
    'confirmed_withdraw' => $confirmedWithdraw,
-   'company_revenues' => $company_revenues
+   'company_revenues' => $company_revenues,
+   'total_money_users' => $totalMoney,
   ]);
  }
 }

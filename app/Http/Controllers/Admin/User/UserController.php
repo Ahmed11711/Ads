@@ -23,27 +23,22 @@ class UserController extends BaseController
    collectionName: 'User'
   );
 
-  $this->storeRequestClass = UserStoreRequest::class;
+  $this->storeRequestClass  = UserStoreRequest::class;
   $this->updateRequestClass = UserUpdateRequest::class;
-  $this->resourceClass = UserResource::class;
+  $this->resourceClass      = UserResource::class;
  }
 
  public function update(Request $request, int $id): JsonResponse
  {
-  // 1️⃣ تنفيذ التحديثات العادية عبر الريبو
   $response = parent::update($request, $id);
 
-  // 2️⃣ جلب البيانات المطلوبة للتعديل
   $data = $request->only(['balance', 'affiliate_balance']);
 
-  // 3️⃣ التحقق من وجود أي قيمة للتحديث
   if (!empty(array_filter($data, fn($v) => $v !== null))) {
 
-   // جلب سجل المستخدم من جدول user_balances
    $balanceRecord = DB::table('user_balances')->where('user_id', $id)->first();
 
    if ($balanceRecord) {
-    // لو السجل موجود → تحديث القيم الموجودة فقط
     $updateData = [];
 
     if (array_key_exists('balance', $data)) {
@@ -57,7 +52,6 @@ class UserController extends BaseController
      DB::table('user_balances')->where('user_id', $id)->update($updateData);
     }
    } else {
-    // لو السجل غير موجود → إدخال فقط القيم الموجودة في الـ request
     $insertData = ['user_id' => $id];
 
     if (array_key_exists('balance', $data)) {
@@ -67,14 +61,12 @@ class UserController extends BaseController
      $insertData['affiliate_balance'] = $data['affiliate_balance'];
     }
 
-    // لو فيه قيم للتخزين → insert
     if (count($insertData) > 1) {
      DB::table('user_balances')->insert($insertData);
     }
    }
   }
 
-  // 4️⃣ استرجاع البيانات النهائية
   $user = $this->repository->find($id);
   $balance = DB::table('user_balances')->where('user_id', $id)->first();
   $user->balance = $balance;
