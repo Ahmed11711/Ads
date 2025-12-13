@@ -100,6 +100,8 @@ class AuthController extends Controller
      'password' => bcrypt(Str::random(20)), // dummy password
      'email_verified_at' => now(),
      'last_login_at' => now(),
+     'gender' => $data['gender'],
+     'age' => $data['age'],
     ]
    );
   } else {
@@ -147,7 +149,7 @@ class AuthController extends Controller
   $user->count_withdraw_pending = withdraw::where('user_id', $user->id)->where('status', 'pending')->count() ?? 0;
   $token = JWTAuth::fromUser($user);
   $user->token = $token;
-  $profileImage = $user->profile_image
+  $user->profile_image
    ? 'http://astar.zayamrock.com/storage/' . ltrim($user->profile_image, '/')
    : null;
 
@@ -219,6 +221,7 @@ class AuthController extends Controller
   if (isset($validatedData['password'])) {
    $validatedData['password'] = bcrypt($validatedData['password']);
   }
+
 
   $user->update($validatedData);
   return $this->successResponse([

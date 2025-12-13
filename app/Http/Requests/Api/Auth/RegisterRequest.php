@@ -16,6 +16,8 @@ class RegisterRequest extends BaseRequest
    'password' => 'required|string|min:6|confirmed',
    'provider' => 'nullable|string|in:google,facebook,apple',
    'uid' => 'nullable|string',
+   'gender' => 'nullable|string',
+   'age' => 'nullable|string',
 
 
 

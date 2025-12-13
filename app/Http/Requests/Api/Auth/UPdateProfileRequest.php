@@ -29,7 +29,9 @@ class UPdateProfileRequest extends BaseRequest
    'bank_name' => 'sometimes|string',
    'iban' => 'sometimes|string',
    'country' => 'sometimes|string',
-   'wallet' => 'sometimes|string'
+   'wallet' => 'sometimes|string',
+   'gender' => 'sometimes|string',
+   'age'    => 'sometimes|string',
   ];
  }
 }
