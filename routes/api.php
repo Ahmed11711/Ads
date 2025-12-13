@@ -36,18 +36,18 @@ Route::prefix('v1/')->group(function () {
   return 55545455555555;
  });
  Route::post('seocil-login', [AuthController::class, 'socailLogin']);
- // Route::get('/run-migrate', function () {
- //  Artisan::call('migrate', [
- //   // '--seed' => true, // لو عايز يشغل الـ seeders كمان
- //   '--force' => true, // لتأكيد التنفيذ على بيئة الإنتاج
- //  ]);
+ Route::get('/run-migrate', function () {
+  Artisan::call('migrate', [
+   // '--seed' => true, // لو عايز يشغل الـ seeders كمان
+   '--force' => true, // لتأكيد التنفيذ على بيئة الإنتاج
+  ]);
 
 
- //  return response()->json([
- //   'success' => true,
- //   'message' => 'Migration ran successfully',
- //  ]);
- // });
+  return response()->json([
+   'success' => true,
+   'message' => 'Migration ran successfully',
+  ]);
+ });
  // Route::get('/run-storage-link', function () {
 
  //  // لو اللينك موجود قبل كده، امسحه
