@@ -7,6 +7,7 @@ use App\Http\Requests\NotficatonRequest;
 use App\Models\notifications;
 use App\Models\User;
 use App\Traits\ApiResponseTrait;
+use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
@@ -29,5 +30,21 @@ class NotificationController extends Controller
   ]);
 
   return  $this->successResponse($notification, 'Notification sent successfully');
+ }
+
+ public function readAll(Request $request)
+ {
+  $user = auth()->user();
+
+  notifications::where('user_id', $user->id)
+   ->where('is_read', false) // اختياري
+   ->update([
+    'is_read' => true,
+   ]);
+
+  return response()->json([
+   'status' => true,
+   'message' => 'All notifications marked as seen',
+  ]);
  }
 }
