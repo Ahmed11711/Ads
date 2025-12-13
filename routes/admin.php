@@ -19,9 +19,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('admin/v1/login', [AuthController::class, 'login'])->name('admin.login');
 Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(function () {
- Route::apiResource('users', UserController::class)->names('user')->except('put');
+ Route::apiResource('users', UserController::class)->names('user')->except(['put', 'get']);
 
  Route::patch('users/{user}', [UserController::class, 'update']);
+ Route::get('users/', [UserController::class, 'index']);
 
  Route::apiResource('withdraws', withdrawController::class)->names('withdraw');
  Route::apiResource('notifications', notificationsController::class)->names('notifications')->except('post');

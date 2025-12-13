@@ -13,6 +13,11 @@ class UpdateUserController extends Controller
 {
  use ApiResponseTrait;
 
+
+ public function index()
+ {
+  return $user = User::get();
+ }
  public function update(UserUpdateRequest $request, $id)
  {
 

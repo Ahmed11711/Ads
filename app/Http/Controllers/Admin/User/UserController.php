@@ -65,4 +65,5 @@ class UserController extends BaseController
    'Record updated successfully'
   );
  }
+ public function index()
 }
