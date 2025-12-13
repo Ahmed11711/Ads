@@ -67,6 +67,7 @@ class User extends Authenticatable implements JWTSubject
  {
   return [];
  }
+ protected array $withRelations = ['balance'];
 
  public function balance()
  {
