@@ -21,7 +21,7 @@ class StatsController extends Controller
   $total_revenue = Company::sum('amount');
 
   $pending_withdrawals = withdraw::where('status', 'pending')->count();
-  $confirmedWithdraw = withdraw::where('amount', 'confirmed')->sum('amount');
+  $confirmedWithdraw = withdraw::where('status', 'confirmed')->sum('amount');
 
   $company_revenues = Company::select('name', 'amount')->get();
 
