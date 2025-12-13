@@ -71,12 +71,7 @@ class User extends Authenticatable implements JWTSubject
  {
   parent::boot();
 
-  static::created(function ($user) {
-   $user->balance()->create([
-    'balance' => 0,
-    'affiliate_balance' => 0,
-   ]);
-  });
+
 
   static::creating(function ($user) {
    if (empty($user->affiliate_code)) {
@@ -89,7 +84,6 @@ class User extends Authenticatable implements JWTSubject
   });
  }
 
- // protected $with = ['balance'];
 
  public function balance()
  {
