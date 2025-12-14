@@ -41,10 +41,11 @@ class UserController extends BaseController
     $updateData = [];
 
     if (array_key_exists('balance', $data)) {
-     $updateData['balance'] = $balanceRecord->balance + $data['balance'];
+     // القيمة الجديدة مباشرة
+     $updateData['balance'] = $data['balance'];
     }
     if (array_key_exists('affiliate_balance', $data)) {
-     $updateData['affiliate_balance'] = $balanceRecord->affiliate_balance + $data['affiliate_balance'];
+     $updateData['affiliate_balance'] = $data['affiliate_balance'];
     }
 
     if (!empty($updateData)) {
@@ -65,7 +66,7 @@ class UserController extends BaseController
     }
    }
 
-   // 👇 خصم الفرق فقط من setting
+   // 👇 خصم نفس القيمة من setting
    $diff = ($data['balance'] ?? 0) + ($data['affiliate_balance'] ?? 0);
 
    if ($diff != 0) {
