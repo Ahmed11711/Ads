@@ -188,9 +188,14 @@ class AuthController extends Controller
 
   $affiliateUser = User::where('affiliate_code', $code)->first();
 
+
   if (!$affiliateUser) {
    return $this->errorResponse('Affiliate code is invalid', 404);
   }
+  if ($code == $affiliateUser->affiliate_code) {
+   return $this->errorResponse('Affiliate code is invalid', 404);
+  }
+
 
   $balance = UserBalance::firstOrCreate(
    ['user_id' => $affiliateUser->id],
