@@ -71,7 +71,6 @@ class UpdateUserController extends Controller
    ->lockForUpdate()
    ->firstOrFail();
 
-  // لو الفرق موجب → خصم
   if ($diff > 0) {
    if ($setting->value < $diff) {
     throw new \Exception('Setting balance not enough');
@@ -80,7 +79,6 @@ class UpdateUserController extends Controller
    $setting->decrement('value', $diff);
   }
 
-  // لو الفرق سالب → رجوع فلوس
   if ($diff < 0) {
    $setting->increment('value', abs($diff));
   }

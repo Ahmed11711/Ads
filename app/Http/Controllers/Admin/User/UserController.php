@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\BaseController\BaseController;
 use App\Http\Requests\Admin\User\UserStoreRequest;
-
 use App\Http\Requests\Admin\User\UserUpdateRequest;
 use App\Http\Resources\Admin\User\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
@@ -65,11 +64,19 @@ class UserController extends BaseController
      DB::table('user_balances')->insert($insertData);
     }
    }
+
+   // 👇 خصم الفرق فقط من setting
+   $diff = ($data['balance'] ?? 0) + ($data['affiliate_balance'] ?? 0);
+
+   if ($diff != 0) {
+    DB::table('settings')
+     ->where('key', 'avalible-riget')
+     ->decrement('value', $diff);
+   }
   }
 
   $user = $this->repository->find($id);
-  $balance = DB::table('user_balances')->where('user_id', $id)->first();
-  $user->balance = $balance;
+  $user->balance = DB::table('user_balances')->where('user_id', $id)->first();
 
   return $this->successResponse(
    new $this->resourceClass($user),
