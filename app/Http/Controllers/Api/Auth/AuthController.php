@@ -363,7 +363,7 @@ class AuthController extends Controller
 
   // 👇 تخزين Full URL بدلاً من المسار النسبي
   // $domain = rtrim(config('app.url'), '/');
-  $domain = 'https://api.regtai.com';
+  $domain = 'https://ahmed.api.regtai.com';
   $validated['profile_image'] = $domain . '/uploads/profile_images/' . $filename;
 
   return $validated;
