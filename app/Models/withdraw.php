@@ -43,7 +43,6 @@ class Withdraw extends Model
       return;
      }
 
-     // تحديد نوع السحب
      if ($withdraw->type === 'affiliate') {
       $userBalance->affiliate_balance += $withdraw->amount;
      } else {
