@@ -205,29 +205,7 @@ class AuthController extends Controller
   return $this->successResponse([], 'Affiliate code is valid, balance updated', 200);
  }
 
- public function updateProfile(UPdateProfileRequest $request)
- {
-  $user = auth()->user();
 
-  $validatedData = $request->validated();
-
-  if ($request->hasFile('profile_image')) {
-   $file = $request->file('profile_image');
-
-   $path = $file->store('profile_images', 'public');
-   $validatedData['profile_image'] = $path;
-  }
-
-  if (isset($validatedData['password'])) {
-   $validatedData['password'] = bcrypt($validatedData['password']);
-  }
-
-
-  $user->update($validatedData);
-  return $this->successResponse([
-   'user' => $user,
-  ], 'Profile updated successfully', 200);
- }
 
  public function resendOtp(resendOtpRequest $request)
  {
@@ -341,25 +319,39 @@ class AuthController extends Controller
   ], 'User balance retrieved successfully');
  }
 
- protected function uploadProfileImage(
-  Request $request,
-  array $validated,
-  $user = null
- ): array {
+ public function updateProfile(UpdateProfileRequest $request)
+ {
+  $user = auth()->user();
+  $validatedData = $request->validated();
 
+  // رفع الصورة وتخزين Full URL مباشرة
+  $validatedData = $this->uploadProfileImage($request, $validatedData, $user);
+
+  // تشفير الباسورد لو موجود
+  if (isset($validatedData['password'])) {
+   $validatedData['password'] = bcrypt($validatedData['password']);
+  }
+
+  $user->update($validatedData);
+
+  return $this->successResponse([
+   'user' => $user,
+  ], 'Profile updated successfully', 200);
+ }
+
+
+ protected function uploadProfileImage(Request $request, array $validated, $user = null): array
+ {
   if (!$request->hasFile('profile_image')) {
    return $validated;
   }
 
   $file = $request->file('profile_image');
-
   $filename = time() . '_' . $file->getClientOriginalName();
 
   // رفع مباشر داخل public/uploads/profile_images
-  $file->move(
-   public_path('uploads/profile_images'),
-   $filename
-  );
+  $destinationPath = public_path('uploads/profile_images');
+  $file->move($destinationPath, $filename);
 
   // حذف الصورة القديمة لو موجودة
   if ($user && $user->profile_image) {
@@ -369,8 +361,10 @@ class AuthController extends Controller
    }
   }
 
-  // تخزين path فقط
-  $validated['profile_image'] = 'uploads/profile_images/' . $filename;
+  // 👇 تخزين Full URL بدلاً من المسار النسبي
+  // $domain = rtrim(config('app.url'), '/');
+  $domain = 'https://api.regtai.com';
+  $validated['profile_image'] = $domain . '/uploads/profile_images/' . $filename;
 
   return $validated;
  }
