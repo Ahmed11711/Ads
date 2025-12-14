@@ -329,7 +329,6 @@ class AuthController extends Controller
   $user = auth()->user();
   $validatedData = $request->validated();
 
-  // رفع الصورة وتخزين Full URL مباشرة
   $validatedData = $this->uploadProfileImage($request, $validatedData, $user);
 
   // تشفير الباسورد لو موجود

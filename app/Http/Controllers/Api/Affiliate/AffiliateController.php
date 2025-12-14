@@ -10,23 +10,24 @@ use App\Traits\ApiResponseTrait;
 
 class AffiliateController extends Controller
 {
-    use ApiResponseTrait   ;
-    public function myAffiliate(Request $request)
-    {
-     $user=auth()->user();
-     $user->affiliate_code;
+ use ApiResponseTrait;
+ public function myAffiliate(Request $request)
+ {
+  $user = auth()->user();
+  $user->affiliate_code;
 
-     $users=User::where('referred_by',$user->affiliate_code)->get();
-     $teamCount=$users->count();
+  $users = User::where('referred_by', $user->affiliate_code)->get();
+  $teamCount = $users->count();
+
 
   return $this->successResponse(
-        [
-            'user' => AffiliateResource::collection($users),
-            'team_count' => $teamCount
-        ],
-        'Affiliate data fetched successfully',
-        200
-    );    
-
-    }
+   [
+    'user' => AffiliateResource::collection($users),
+    'team_count' => $teamCount,
+    'total_profit' => 0,
+   ],
+   'Affiliate data fetched successfully',
+   200
+  );
+ }
 }
