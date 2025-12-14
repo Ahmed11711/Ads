@@ -355,15 +355,21 @@ class AuthController extends Controller
 
   // حذف الصورة القديمة لو موجودة
   if ($user && $user->profile_image) {
-   $oldPath = public_path($user->profile_image);
+   $oldPath = public_path('uploads/profile_images/' . basename($user->profile_image));
    if (file_exists($oldPath)) {
     unlink($oldPath);
    }
   }
 
-  // 👇 تخزين Full URL بدلاً من المسار النسبي
-  // $domain = rtrim(config('app.url'), '/');
+  // 👇 تحديد الدومين حسب البيئة
+  if (app()->environment('local')) {
+   $domain = 'http://localhost:8000';
+  } else {
+   $domain = 'https://ahmed.api.regtai.com';
+  }
   $domain = 'https://ahmed.api.regtai.com';
+
+  // تخزين Full URL
   $validated['profile_image'] = $domain . '/uploads/profile_images/' . $filename;
 
   return $validated;
