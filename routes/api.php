@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\User\UpdateUserController;
 use App\Http\Controllers\Api\Ads\MyHistroryController;
 use App\Http\Controllers\Api\Affiliate\AffiliateController;
 use App\Http\Controllers\Api\Auth\AuthController;
@@ -9,8 +10,9 @@ use App\Http\Controllers\Api\Notifications\NotificationsController;
 use App\Http\Controllers\Api\Withdraw\WithdrawController;
 use App\Http\Middleware\CheckJwtToken;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -31,6 +33,15 @@ Route::prefix('v1/')->group(function () {
    Route::post('update-profile', [AuthController::class, 'updateProfile']);
   });
  });
+
+
+ Route::get('ss', [UpdateUserController::class, 'addMonyForSetting']);
+
+
+
+
+
+
 
  Route::get('ahmed11711', function () {
   return 55545455555555;

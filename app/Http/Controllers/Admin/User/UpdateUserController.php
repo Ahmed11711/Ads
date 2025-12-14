@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Models\UserBalance;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class UpdateUserController extends Controller
 {
@@ -27,44 +26,65 @@ class UpdateUserController extends Controller
  {
   DB::transaction(function () use ($request, $id) {
 
-   $user = User::findOrFail($id);
+   $user = User::with('balance')->findOrFail($id);
 
-   // تحديث بيانات اليوزر
+   // تحديث بيانات اليوزر العادية
    $user->update($request->except(['balance', 'affiliate_balance']));
 
    if ($request->hasAny(['balance', 'affiliate_balance'])) {
 
-    $balance = $request->balance ?? 0;
-    $affiliateBalance = $request->affiliate_balance ?? 0;
+    // الرصيد القديم
+    $oldBalance = $user->balance?->balance ?? 0;
+    $oldAffiliate = $user->balance?->affiliate_balance ?? 0;
 
-    $totalAmount = $balance + $affiliateBalance;
+    // الرصيد الجديد
+    $newBalance = $request->balance ?? $oldBalance;
+    $newAffiliate = $request->affiliate_balance ?? $oldAffiliate;
 
-    if ($totalAmount <= 0) {
-     throw new \Exception('قيمة الرصيد غير صحيحة');
-    }
-
-    $setting = Setting::where('key', 'avalible-riget')
-     ->lockForUpdate()
-     ->firstOrFail();
-
-    if ($setting->value < $totalAmount) {
-     throw new \Exception('الرصيد العام غير كافي');
-    }
+    // حساب الفرق
+    $diff =
+     ($newBalance - $oldBalance) +
+     ($newAffiliate - $oldAffiliate);
 
     // تحديث رصيد المستخدم
     UserBalance::updateOrCreate(
      ['user_id' => $user->id],
      [
-      'balance' => $balance,
-      'affiliate_balance' => $affiliateBalance,
+      'balance' => $newBalance,
+      'affiliate_balance' => $newAffiliate,
      ]
     );
 
-    // خصم مباشر من رصيد السيستم
-    $setting->decrement('value', $totalAmount);
+    // لو في فرق فعلي
+    if ($diff != 0) {
+     $this->adjustSettingByDiff($diff);
+    }
    }
   });
 
-  return $this->successResponse(true, 'User updated & balance deducted');
+  return $this->successResponse(true, 'User updated with balance difference');
+ }
+
+ public function adjustSettingByDiff($diff)
+ {
+  $setting = Setting::where('key', 'avalible-riget')
+   ->lockForUpdate()
+   ->firstOrFail();
+
+  // لو الفرق موجب → خصم
+  if ($diff > 0) {
+   if ($setting->value < $diff) {
+    throw new \Exception('Setting balance not enough');
+   }
+
+   $setting->decrement('value', $diff);
+  }
+
+  // لو الفرق سالب → رجوع فلوس
+  if ($diff < 0) {
+   $setting->increment('value', abs($diff));
+  }
+
+  return $setting->fresh();
  }
 }
