@@ -30,6 +30,7 @@ class UserResource extends JsonResource
    'country' => $this->country ?? "",
    "bank_name" => $this->bank_name ?? "",
    "iban" => $this->iban ?? "",
+   "wallet" => $this->wallet ?? "",
    'last_login_at' => $this->updated_at,
    'created_at' => $this->created_at,
    'updated_at' => $this->updated_at,
