@@ -367,7 +367,7 @@ class AuthController extends Controller
   } else {
    $domain = 'https://ahmed.api.regtai.com';
   }
-  $domain = 'https://ahmed.api.regtai.com';
+  $domain = 'https://api.regtai.com';
 
   // تخزين Full URL
   $validated['profile_image'] = $domain . '/uploads/profile_images/' . $filename;
