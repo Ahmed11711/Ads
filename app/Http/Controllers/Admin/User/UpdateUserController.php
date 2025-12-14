@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserBalance;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UpdateUserController extends Controller
 {
@@ -21,46 +22,49 @@ class UpdateUserController extends Controller
   $user = User::with('balance')->get();
   return $this->successResponse(UserResource::collection($user), 'sss');
  }
+
  public function update(UserUpdateRequest $request, $id)
  {
-  $user = User::findOrFail($id);
+  DB::transaction(function () use ($request, $id) {
 
-  // تحديث بيانات المستخدم بدون الرصيد
-  $userData = $request->except(['balance', 'affiliate_balance']);
-  $user->update($userData);
+   $user = User::findOrFail($id);
 
-  if ($request->hasAny(['balance', 'affiliate_balance'])) {
+   // تحديث بيانات اليوزر
+   $user->update($request->except(['balance', 'affiliate_balance']));
 
-   // الرصيد القديم
-   $oldBalance = UserBalance::where('user_id', $user->id)->first();
+   if ($request->hasAny(['balance', 'affiliate_balance'])) {
 
-   $oldMainBalance = $oldBalance->balance ?? 0;
-   $oldAffiliateBalance = $oldBalance->affiliate_balance ?? 0;
+    $balance = $request->balance ?? 0;
+    $affiliateBalance = $request->affiliate_balance ?? 0;
 
-   // قيمة الخصم من الإعدادات
-   $deduction = (float) Setting::where('key', 'avalible-riget')->value('value') ?? 0;
+    $totalAmount = $balance + $affiliateBalance;
 
-   // الرصيد الجديد
-   $newBalance = $request->balance ?? $oldMainBalance;
-   $newAffiliateBalance = $request->affiliate_balance ?? $oldAffiliateBalance;
+    if ($totalAmount <= 0) {
+     throw new \Exception('قيمة الرصيد غير صحيحة');
+    }
 
-   // لو حصل تعديل فعلي
-   if (
-    $newBalance != $oldMainBalance ||
-    $newAffiliateBalance != $oldAffiliateBalance
-   ) {
-    $newBalance = max(0, $newBalance - $deduction);
+    $setting = Setting::where('key', 'avalible-riget')
+     ->lockForUpdate()
+     ->firstOrFail();
+
+    if ($setting->value < $totalAmount) {
+     throw new \Exception('الرصيد العام غير كافي');
+    }
+
+    // تحديث رصيد المستخدم
+    UserBalance::updateOrCreate(
+     ['user_id' => $user->id],
+     [
+      'balance' => $balance,
+      'affiliate_balance' => $affiliateBalance,
+     ]
+    );
+
+    // خصم مباشر من رصيد السيستم
+    $setting->decrement('value', $totalAmount);
    }
+  });
 
-   UserBalance::updateOrCreate(
-    ['user_id' => $user->id],
-    [
-     'balance' => $newBalance,
-     'affiliate_balance' => $newAffiliateBalance,
-    ]
-   );
-  }
-
-  return $this->successResponse($user, "updated");
+  return $this->successResponse(true, 'User updated & balance deducted');
  }
 }
