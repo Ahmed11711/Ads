@@ -35,7 +35,9 @@ class User extends Authenticatable implements JWTSubject
   'last_login_at',
   'gender',
   'age',
-  'country'
+  'country',
+  'bank_name',
+  'iban',
 
  ];
  /**

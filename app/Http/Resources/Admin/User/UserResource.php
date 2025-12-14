@@ -27,7 +27,8 @@ class UserResource extends JsonResource
    'affiliate_balance' => $this->affiliate_balance_value,
    'age' => $this->age ?? "",
    'gender' => $this->gender ?? "",
-
+   'country' => $this->country ?? "",
+   "bank_name" => $this->bank_name ?? "",
    'last_login_at' => $this->updated_at,
    'created_at' => $this->created_at,
    'updated_at' => $this->updated_at,
