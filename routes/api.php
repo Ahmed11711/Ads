@@ -47,11 +47,21 @@ Route::prefix('v1/')->group(function () {
   return 55545455555555;
  });
  Route::post('seocil-login', [AuthController::class, 'socailLogin']);
- Route::get('/run-migrate', function () {
-  Artisan::call('migrate', [
-   // '--seed' => true, // لو عايز يشغل الـ seeders كمان
-   '--force' => true, // لتأكيد التنفيذ على بيئة الإنتاج
-  ]);
+Route::get('/run-storage-link', function () {
+    try {
+        Artisan::call('storage:link');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Storage link created successfully',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to create storage link: ' . $e->getMessage(),
+        ]);
+    }
+});
 
 
   return response()->json([
