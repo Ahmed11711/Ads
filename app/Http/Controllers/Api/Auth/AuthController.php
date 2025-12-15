@@ -331,8 +331,7 @@ class AuthController extends Controller
 
   $validatedData = $this->uploadProfileImage($request, $validatedData, $user);
 
-  // تشفير الباسورد لو موجود
-  if (isset($validatedData['password'])) {
+   if (isset($validatedData['password'])) {
    $validatedData['password'] = bcrypt($validatedData['password']);
   }
 
@@ -371,7 +370,8 @@ class AuthController extends Controller
   } else {
    $domain = 'https://ahmed.api.regtai.com';
   }
-  $domain = 'https://api.regtai.com';
+//   $domain = 'https://api.regtai.com';
+  $domain = 'https://api.regtai.com/ahmed/public';
 
   // تخزين Full URL
   $validated['profile_image'] = $domain . '/uploads/profile_images/' . $filename;
