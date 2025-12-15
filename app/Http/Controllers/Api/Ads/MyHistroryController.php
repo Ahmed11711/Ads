@@ -16,13 +16,15 @@ class MyHistroryController extends Controller
  {
   $user = auth()->user();
 
-  $userAds = userWithAds::where('user_id', $user->id)
-   ->when($request->type, function ($query) use ($request) {
-    $query->where('type', $request->type);
-   }, function ($query) {
-    $query->whereIn('type', ['ads', 'survey']);
-   })
-   ->paginate(10);
+$userAds = userWithAds::where('user_id', $user->id)
+    ->when($request->type, function ($query) use ($request) {
+        $query->where('type', $request->type);
+    }, function ($query) {
+        $query->whereIn('type', ['ads', 'survey']);
+    })
+    ->orderBy('created_at', 'desc') // <-- ترتيب تنازلي حسب الإنشاء
+    ->paginate(10);
+
 
   // حساب الـ summary
   $summary = [
