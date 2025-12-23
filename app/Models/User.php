@@ -39,8 +39,15 @@ class User extends Authenticatable implements JWTSubject
   'bank_name',
   'iban',
   'wallet',
+  'is_login'
 
  ];
+ // App\Models\User.php
+ public function balanceRecord()
+ {
+  return $this->hasOne(UserBalance::class, 'user_id', 'id');
+ }
+
  /**
   * The attributes that should be hidden for serialization.
   *
@@ -50,6 +57,15 @@ class User extends Authenticatable implements JWTSubject
   'password',
   'remember_token',
  ];
+
+ // App\Models\User.php
+ // App\Models\User.php
+ public function getReferralsCountAttribute()
+ {
+  return User::where('referred_by', $this->affiliate_code)->count();
+ }
+
+
 
  /**
   * Get the attributes that should be cast.

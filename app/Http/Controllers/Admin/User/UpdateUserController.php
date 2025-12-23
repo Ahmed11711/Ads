@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserBalance;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UpdateUserController extends Controller
 {

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\Company\CompanyController;
 use App\Http\Controllers\Admin\notifications\notificationsController;
+use App\Http\Controllers\Admin\PushMoneyForUserController;
 use App\Http\Controllers\Admin\setting\settingController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\User\UpdateUserController;
@@ -17,28 +18,31 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 Route::post('admin/v1/login', [AuthController::class, 'login'])->name('admin.login');
-Route::prefix('admin/v1')->middleware(CheckJwtTokenByAdmin::class)->group(function () {
- Route::apiResource('users', UserController::class)->names('user')->except(['put']);
+Route::prefix('admin/v1')->group(function () {
+    Route::post('push-mony', [PushMoneyForUserController::class, 'receiveMoney']);
 
- Route::patch('users/{user}', [UserController::class, 'update']);
+    Route::apiResource('users', UserController::class)->names('user')->except(['put']);
 
- Route::apiResource('withdraws', withdrawController::class)->names('withdraw');
- Route::apiResource('notifications', notificationsController::class)->names('notifications')->except('post');
- Route::post('notifications', [heleperController::class, 'notification']);
- Route::get('my-affiliate', [AuthController::class, 'myAffiliate']);
- Route::apiResource('companies', CompanyController::class)->names('company');
- Route::apiResource('settings', settingController::class)->names('setting');
- Route::apiResource('user_with_ads', userWithAdsController::class)->names('user_with_ads');
- Route::get('dashboard', [StatsController::class, 'getStats']);
- Route::get('all-emails', function () {
+    Route::patch('users/{user}', [UserController::class, 'update']);
 
-  return User::select(['id', 'email'])->get();
- });
+    Route::apiResource('withdraws', withdrawController::class)->names('withdraw');
+    Route::apiResource('notifications', notificationsController::class)->names('notifications')->except('post');
+    Route::post('notifications', [heleperController::class, 'notification']);
+    Route::get('my-affiliate', [AuthController::class, 'myAffiliate']);
+    Route::apiResource('companies', CompanyController::class)->names('company');
+    Route::apiResource('settings', settingController::class)->names('setting');
+    Route::apiResource('user_with_ads', userWithAdsController::class)->names('user_with_ads');
+    Route::get('dashboard', [StatsController::class, 'getStats']);
+    Route::get('all-emails', function () {
+
+        return User::select(['id', 'email'])->get();
+    });
 });
 
 Route::get('sssss', function () {
- return "ss";
+    return "ss";
 });
 
 Route::prefix('v1')->group(function () {});

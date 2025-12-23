@@ -16,18 +16,22 @@ use App\Models\User;
 use App\Models\userBalance;
 use App\Models\withdraw;
 use App\Traits\ApiResponseTrait;
+use App\Traits\BalanceSystem;
 use App\Traits\OTPTrait;
+use App\Traits\SendOtpViaBrevo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Kreait\Firebase\Factory;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
+
 class AuthController extends Controller
 {
- use ApiResponseTrait, OTPTrait;
+ use ApiResponseTrait, OTPTrait, SendOtpViaBrevo, BalanceSystem;
 
  public function login(loginRequest $request)
  {
@@ -47,6 +51,7 @@ class AuthController extends Controller
      'password' => bcrypt(Str::random(20)), // dummy password
      'email_verified_at' => now(),
      'last_login_at' => now(),
+     'is_login' => 1,
 
     ]);
    }
@@ -59,6 +64,12 @@ class AuthController extends Controller
      return $this->errorResponse('Invalid credentials', 401);
     }
     $user = auth()->user();
+    if ($user->is_login == 1) {
+     return $this->errorResponse(
+      'The account is already logged in on another device',
+      409
+     );
+    }
    } catch (JWTException $e) {
     return $this->errorResponse('Could not create token', 500);
    }
@@ -66,8 +77,11 @@ class AuthController extends Controller
 
   if (!empty($data['fcm_token'])) {
    $user->fcm_token = $data['fcm_token'];
+   // $user->is_login = 1;
    $user->save();
   }
+  $user->is_login = 1;
+  $user->save();
 
   $userBalance = UserBalance::where('user_id', $user->id)->first();
   $user->balance = $userBalance->balance ?? 0;
@@ -77,6 +91,7 @@ class AuthController extends Controller
   $user->count_withdraw_pending = withdraw::where('user_id', $user->id)->where('status', 'pending')->count() ?? 0;
   $user->token = $token;
   $user->otp = $user->otp ?? null;
+
 
   return $this->successResponse([
    'user' => $user,
@@ -102,6 +117,8 @@ class AuthController extends Controller
      'last_login_at' => now(),
      'gender' => $data['gender']  ?? null,
      'age' => $data['age'] ?? null,
+     'is_login' => 1,
+
     ]
    );
   } else {
@@ -113,6 +130,7 @@ class AuthController extends Controller
   $token = JWTAuth::fromUser($user);
   $user->otp = $user->otp ?? null;
 
+  $this->otp($data['email'], $user->otp);
 
   return $this->successResponse([
    'token' => $token,
@@ -128,15 +146,25 @@ class AuthController extends Controller
   return $code;
  }
 
- public function logout(Request $request)
+ public function logout(Request $request,$id)
  {
   try {
-   JWTAuth::invalidate(JWTAuth::getToken());
+   $user = User::where('id',$id)->first();
+
+   if ($user) {
+    $user->update([
+     'is_login'   => 0,
+    ]);
+   }
+
+//   JWTAuth::invalidate(JWTAuth::getToken());
+
    return $this->successResponse([], 'User logged out successfully', 200);
   } catch (JWTException $e) {
    return $this->errorResponse('Could not invalidate token', 500);
   }
  }
+
 
  public function me(Request $request)
  {
@@ -187,13 +215,18 @@ class AuthController extends Controller
   $code = $validatedData['affiliate_code'];
 
   $affiliateUser = User::where('affiliate_code', $code)->first();
-
-
   if (!$affiliateUser) {
    return $this->errorResponse('Affiliate code is invalid', 404);
   }
-  if ($code == $affiliateUser->affiliate_code) {
-   return $this->errorResponse('Affiliate code is invalid', 404);
+
+  $user = User::where('email', $validatedData['email'])->first();
+  $user->referred_by = $affiliateUser->affiliate_code;
+  $user->save();
+
+
+
+  if ($code === $user->affiliate_code) {
+   return $this->errorResponse('Your is Affiliate code ', 404);
   }
 
 
@@ -203,9 +236,13 @@ class AuthController extends Controller
   );
 
   $balance->increment('balance', 10);
-  $user = User::where('email', $validatedData['email'])->first();
-  $user->referred_by = $affiliateUser->affiliate_code;
-  $user->save();
+
+  $this->addForAffiliate();
+
+
+  // $user = User::where('email', $validatedData['email'])->first();
+  // $user->referred_by = $affiliateUser->affiliate_code;
+  // $user->save();
 
   return $this->successResponse([], 'Affiliate code is valid, balance updated', 200);
  }
@@ -218,6 +255,8 @@ class AuthController extends Controller
 
   $otp = $this->generateOtp(6);
   $user->update(['otp' => $otp]);
+
+  $this->otp($user->email, $otp);
 
   // Here you would typically send the OTP via email or SMS
 
@@ -285,6 +324,8 @@ class AuthController extends Controller
   $otp = rand(100000, 999999);
   $user->otp = $otp;
   $user->save();
+  $this->otp($user->email, $otp);
+
 
   return $this->successResponse($otp, 'OTP sent successfully');
  }
@@ -331,7 +372,7 @@ class AuthController extends Controller
 
   $validatedData = $this->uploadProfileImage($request, $validatedData, $user);
 
-   if (isset($validatedData['password'])) {
+  if (isset($validatedData['password'])) {
    $validatedData['password'] = bcrypt($validatedData['password']);
   }
 
@@ -370,12 +411,29 @@ class AuthController extends Controller
   } else {
    $domain = 'https://ahmed.api.regtai.com';
   }
-//   $domain = 'https://api.regtai.com';
+  //   $domain = 'https://api.regtai.com';
   $domain = 'https://api.regtai.com/ahmed/public';
 
   // تخزين Full URL
   $validated['profile_image'] = $domain . '/uploads/profile_images/' . $filename;
 
   return $validated;
+ }
+
+
+ public function otp($email, $otp)
+ {
+  try {
+   return $this->sendOtp($email, $otp);
+  } catch (\Throwable $e) {
+
+   Log::error('OTP sending failed', [
+    'email' => $email,
+    'error' => $e->getMessage(),
+   ]);
+  }
+
+  // يكمل عادي حتى لو الإيميل متبعتش
+  return true;
  }
 }

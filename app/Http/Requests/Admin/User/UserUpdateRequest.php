@@ -28,6 +28,9 @@ class UserUpdateRequest extends BaseRequest
    'iban' => 'nullable|string',
    'wallet' => 'nullable|string',
    'phone' => 'nullable|string',
+   'gender' => 'nullable|string',
+   'age' => 'nullable|string',
+   'country' => 'nullable|string'
   ];
  }
 }

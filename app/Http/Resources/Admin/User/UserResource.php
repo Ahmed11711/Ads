@@ -23,8 +23,9 @@ class UserResource extends JsonResource
    'address' => $this->address,
    'profile_image' => $this->profile_image,
    'role' => $this->role,
-   'balance' => $this->balance->balance ?? 0,
-   'affiliate_balance' => $this->affiliate_balance_value,
+   'balance' => $this->balanceRecord?->balance ?? 0,
+   'affiliate_balance' => $this->balanceRecord?->affiliate_balance ?? 0,
+
    'age' => $this->age ?? "",
    'gender' => $this->gender ?? "",
    'country' => $this->country ?? "",
@@ -34,6 +35,8 @@ class UserResource extends JsonResource
    'last_login_at' => $this->updated_at,
    'created_at' => $this->created_at,
    'updated_at' => $this->updated_at,
+   'referrals_count' => $this->referrals_count ?? 0,
+
   ];
  }
 }
