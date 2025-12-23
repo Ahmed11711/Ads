@@ -32,13 +32,13 @@ class AuthController extends Controller
             }
             $user = auth()->user();
 
-            if($user->role!='admin' || $user->role=='super_admin'){
+            if ($user->role != 'admin' || $user->role == 'super_admin') {
                 return $this->errorResponse('Unauthorized access', 403);
             }
 
             $user->token = $token;
 
-            $user->balance = UserBalance::where('user_id', $user->id)->value('balance') ?? 0;
+            $user->balance = userBalance::where('user_id', $user->id)->value('balance') ?? 0;
             return $this->successResponse([
                 'user'  => $user,
             ], 'Login successful', 200);
@@ -59,7 +59,5 @@ class AuthController extends Controller
 
 
         return $this->successResponse($parentUser, 'Child affiliates retrieved successfully.');
-
     }
-
 }

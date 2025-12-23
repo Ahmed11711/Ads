@@ -4,7 +4,8 @@ namespace App\Traits;
 
 use App\Models\setting;
 use App\Models\User;
-use App\Models\UserBalance;
+use App\Models\userBalance;
+use Illuminate\Support\Facades\DB;
 
 trait BalanceSystem
 {
@@ -43,7 +44,7 @@ trait BalanceSystem
         $amount = (float) $setting->value;
 
         // 3️⃣ تحديث أو إنشاء رصيد المستخدم
-        $userBalance = UserBalance::updateOrCreate(
+        $userBalance = userBalance::updateOrCreate(
             ['user_id' => $user->id],
             ['balance' => DB::raw("COALESCE(balance,0) + {$amount}")]
         );

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\UserBalance;
+use App\Models\userBalance;
 use App\Models\UserWithAds;
 use App\Models\Company;
 use App\Models\Setting;
@@ -116,7 +116,7 @@ class TheoremReachController extends Controller
             // user balance
             Log::info('Updating USER balance');
 
-            $userBalance = UserBalance::firstOrCreate(
+            $userBalance = userBalance::firstOrCreate(
                 ['user_id' => $userId],
                 ['balance' => 0]
             );
@@ -160,7 +160,6 @@ class TheoremReachController extends Controller
             Log::info('========== CALLBACK SUCCESS ==========');
 
             return response()->json(['status' => 'completed']);
-
         } catch (\Throwable $e) {
             DB::rollBack();
 
@@ -213,7 +212,7 @@ class TheoremReachController extends Controller
             return;
         }
 
-        $balance = UserBalance::firstOrCreate(
+        $balance = userBalance::firstOrCreate(
             ['user_id' => $father->id],
             ['affiliate_balance' => 0]
         );
