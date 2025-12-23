@@ -42,7 +42,7 @@ Route::prefix('admin/v1')->group(function () {
 });
 
 Route::get('sssss', function () {
-    return "ss";
+    return "ssيييييي";
 });
 
 Route::prefix('v1')->group(function () {});
