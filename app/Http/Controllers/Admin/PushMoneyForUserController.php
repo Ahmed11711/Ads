@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PushMoneyForUser;
 use App\Models\User;
-use App\Models\UserBalance;
+use App\Models\userBalance;
 use App\Traits\BalanceSystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +34,7 @@ class PushMoneyForUserController extends Controller
 
             foreach ($users as $user) {
 
-                UserBalance::updateOrCreate(
+                userBalance::updateOrCreate(
                     ['user_id' => $user->id],
                     [
                         'balance' => DB::raw("COALESCE(balance,0) + {$share}")
