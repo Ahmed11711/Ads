@@ -17,7 +17,7 @@ class StatsController extends Controller
     {
         $total_users = User::count();
 
-        $active_users = User::where('status', 'active')->count();
+        // $active_users = User::where('status', 'active')->count();
 
         $total_revenue = Company::sum('amount');
 

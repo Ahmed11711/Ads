@@ -230,7 +230,7 @@ class AuthController extends Controller
       }
 
 
-      $balance = UserBalance::firstOrCreate(
+      $balance = userBalance::firstOrCreate(
          ['user_id' => $affiliateUser->id],
          ['balance' => 0,]
       );
