@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\notifications\notificationsStoreRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification as FirebaseNotification;
 
-class heleperController extends Controller
+class helperController extends Controller
 {
     protected $messaging;
 
@@ -22,79 +21,51 @@ class heleperController extends Controller
         $this->messaging = $factory->createMessaging();
     }
 
+    /**
+     * إرسال Push Notification
+     */
     public function notification(notificationsStoreRequest $request)
     {
         $data = $request->validated();
 
-        // تحويل الإيميلات إلى array
-        $emails = [];
-        if (isset($data['emails'])) {
-            if (is_string($data['emails'])) {
-                $emailsStr = trim($data['emails'], '[]');
-                $emails = array_filter(array_map('trim', explode(',', $emailsStr)));
-            } elseif (is_array($data['emails'])) {
-                $emails = $data['emails'];
-            }
-        }
+        $fcmTokens = [];
 
-        if (!empty($emails)) {
-            // إرسال للإيميلات المحددة فقط
-            $users = User::whereIn('email', $emails)->get(['id', 'email', 'fcm_token']);
-
-            foreach ($users as $user) {
-                // تسجيل Notification في DB
-                DB::table('notifications')->insert([
-                    'user_id' => $user->id,
-                    'title' => $data['title'],
-                    'message' => $data['message'],
-                    'is_read' => $data['is_read'] ?? 0,
-                    'type' => 'individual',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-
-                // إرسال Push Notification عبر Firebase
-                if ($user->fcm_token) {
-                    $message = CloudMessage::withTarget('token', $user->fcm_token)
-                        ->withNotification(FirebaseNotification::create($data['title'], $data['message']))
-                        ->withData(['type' => 'individual']);
-                    try {
-                        $this->messaging->send($message);
-                    } catch (\Exception $e) {
-                        // ممكن تعمل logging بدل ما توقف العملية
-                        Log::error("FCM failed for user {$user->id}: " . $e->getMessage());
-                    }
-                }
+        // تحديد المستلمين
+        if (!empty($data['emails'])) {
+            // لو الكلمة "all" موجودة أرسل لكل المستخدمين
+            if ((is_array($data['emails']) && in_array('all', $data['emails'])) ||
+                (is_string($data['emails']) && strtolower($data['emails']) === 'all')
+            ) {
+                $fcmTokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+            } else {
+                // تحويل الإيميلات إلى array لو كانت string
+                $emails = is_array($data['emails']) ? $data['emails'] : explode(',', trim($data['emails'], '[]'));
+                $fcmTokens = User::whereIn('email', $emails)
+                    ->whereNotNull('fcm_token')
+                    ->pluck('fcm_token')
+                    ->toArray();
             }
         } else {
-            // إرسال Notification للجميع
-            DB::table('notifications')->insert([
-                'user_id' => 0,
-                'title' => $data['title'],
-                'message' => $data['message'],
-                'is_read' => 0,
-                'type' => 'all',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            // لو مفيش أي إيميل محدد، نعتبر "all"
+            $fcmTokens = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+        }
 
-            // إرسال Push Notification لكل المستخدمين اللي عندهم fcm_token
-            $users = User::whereNotNull('fcm_token')->get(['id', 'fcm_token']);
-            foreach ($users as $user) {
-                $message = CloudMessage::withTarget('token', $user->fcm_token)
+        // إرسال Push Notification لكل الـ tokens
+        foreach ($fcmTokens as $token) {
+            try {
+                $message = CloudMessage::withTarget('token', $token)
                     ->withNotification(FirebaseNotification::create($data['title'], $data['message']))
-                    ->withData(['type' => 'all']);
-                try {
-                    $this->messaging->send($message);
-                } catch (\Exception $e) {
-                    Log::error("FCM failed for user {$user->id}: " . $e->getMessage());
-                }
+                    ->withData(['type' => empty($data['emails']) ? 'all' : 'individual']);
+
+                $this->messaging->send($message);
+            } catch (\Exception $e) {
+                Log::error("FCM failed for token {$token}: " . $e->getMessage());
             }
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Notifications sent successfully',
+            'message' => 'Push notifications sent successfully',
         ]);
     }
 }
