@@ -19,8 +19,7 @@ class StatsController extends Controller
         $total_users = User::count();
 
 
-        $today = Carbon::today(); // تاريخ اليوم بدون وقت
-
+        $today = Carbon::today();
         $active_today = User::whereDate('last_login_at', $today)->count();
 
         $total_revenue = Company::sum('amount');
