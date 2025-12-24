@@ -63,16 +63,13 @@ class CompanyCOntroller extends Controller
         ]);
 
         if (!empty($data['company_profit'])) {
-            // تحديث رصيد الشركة
             $company->amount += $data['company_profit'];
             $company->save();
 
-            // تحديث حالة الإعلان
             $userAds->status = "complete";
             $userAds->save();
 
 
-            // updateOrCreate على user balance
             userBalance::updateOrCreate(
                 ['user_id' => $user->id],
                 ['balance' => DB::raw("balance + $priceAds")]

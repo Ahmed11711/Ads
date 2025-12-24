@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\User\UpdateUserController;
 use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\userWithAds\userWithAdsController;
 use App\Http\Controllers\Admin\withdraw\withdrawController;
+use App\Http\Controllers\FirebaseNotificationController;
 use App\Http\Controllers\heleperController;
 use App\Http\Middleware\CheckJwtTokenByAdmin;
 use App\Models\User;
@@ -19,7 +20,10 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 Route::post('admin/v1/login', [AuthController::class, 'login'])->name('admin.login');
+Route::get('push-notifcation', [FirebaseNotificationController::class, 'sendPush']);
+
 Route::prefix('admin/v1')->group(function () {
     Route::post('push-mony', [PushMoneyForUserController::class, 'receiveMoney']);
 

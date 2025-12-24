@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\User\UpdateUserController;
 use App\Http\Controllers\Api\Ads\MyHistroryController;
 use App\Http\Controllers\Api\Affiliate\AffiliateController;
 use App\Http\Controllers\Api\Auth\AuthController;
@@ -7,14 +8,15 @@ use App\Http\Controllers\Api\Company\CompanyCOntroller;
 use App\Http\Controllers\Api\Notification\NotificationController;
 use App\Http\Controllers\Api\Notifications\NotificationsController;
 use App\Http\Controllers\Api\Withdraw\WithdrawController;
-use App\Http\Middleware\CheckJwtToken;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\File;
-use App\Http\Controllers\Admin\User\UpdateUserController;
-
+use App\Http\Controllers\FirebaseNotificationController;
 use App\Http\Controllers\TheoremReachController;
+use App\Http\Middleware\CheckJwtToken;
 use App\Http\Middleware\UpdateLastActive;
+
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
+
 
 Route::post('/theoremreach/callback-test', [TheoremReachController::class, 'debug']);
 
