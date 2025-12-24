@@ -9,7 +9,7 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification as FirebaseNotification;
 
-class helperController extends Controller
+class heleperController extends Controller
 {
     protected $messaging;
 
