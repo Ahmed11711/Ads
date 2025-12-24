@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\userBalance;
 use App\Models\withdraw;
+use Carbon\Carbon;
 
 class StatsController extends Controller
 {
@@ -17,7 +18,10 @@ class StatsController extends Controller
     {
         $total_users = User::count();
 
-        // $active_users = User::where('status', 'active')->count();
+
+        $today = Carbon::today(); // تاريخ اليوم بدون وقت
+
+        $active_today = User::whereDate('last_login_at', $today)->count();
 
         $total_revenue = Company::sum('amount');
 
@@ -29,7 +33,7 @@ class StatsController extends Controller
 
         return response()->json([
             'total_users' => $total_users,
-            'total_user_active' => 5,
+            'total_user_active' => $active_today,
             'total_revenue' => $total_revenue,
             'pending_withdrawals' => $pending_withdrawals,
             'confirmed_withdraw' => $confirmedWithdraw,
